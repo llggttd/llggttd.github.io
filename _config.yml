@@ -7,7 +7,7 @@ title: CrazyMan
 subtitle: Hello, world!
 description:
 author: Ozone
-language:
+language: zh-CN
 timezone: 
 
 # URL
@@ -62,7 +62,7 @@ pagination_dir: page
 # Extensions
 ## Plugins: http://hexo.io/plugins/
 ## Themes: http://hexo.io/themes/
-theme: light
+theme: landscape
 
 # Deployment
 ## Docs: http://hexo.io/docs/deployment.html
