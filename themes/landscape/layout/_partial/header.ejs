@@ -6,9 +6,13 @@
         <a href="<%- url_for() %>" id="logo"><%= config.title %></a>
       </h1>
       <% if (theme.subtitle){ %>
-        <h2 id="subtitle-wrap">
-          <a href="<%- url_for() %>" id="subtitle"><%= theme.subtitle %></a>
+        <h3 id="subtitle-wrap">
+          <p id="subtitle"><%= theme.subtitle %></p>
         </h2>
+        <h3 id="subtitle-wrap">
+          <p id="subtitle"><%= theme.subtitle_2 %></p>
+        </h2>
+
       <% } %>
     </div>
     <div id="header-inner" class="inner">
