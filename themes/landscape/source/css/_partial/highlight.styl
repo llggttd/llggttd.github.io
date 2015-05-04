@@ -60,10 +60,17 @@ $line-numbers
       margin-bottom: 1em
       a
         float: right
+    .gutter
+      border-style: none dashed none none
+      border-color: #777
+      border-width: 1px
+    .code
+      padding-left:15px
     .gutter pre
       @extend $line-numbers
       text-align: right
-      padding-right: 20px
+      color:#aaa
+      padding-right: 10px
     .line
       height: font-size * line-height
   .gist
