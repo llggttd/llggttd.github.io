@@ -4,6 +4,7 @@ updated:
 layout: post
 comments: true
 categories:
+- 系统
 - Mac
 tags:
 ---

@@ -4,8 +4,8 @@ updated:
 layout: post
 comments:   true
 categories:
-- git
 - 工具
+- Git
 tags:
 ---
 

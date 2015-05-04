@@ -1,5 +1,7 @@
 title: "Apache AutoIndex 美化"
 date: 2015-04-30 11:29:11
+categories:
+- 服务器
 tags:
 ---
 

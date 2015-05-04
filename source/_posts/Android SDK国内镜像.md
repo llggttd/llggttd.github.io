@@ -4,6 +4,7 @@ updated:
 layout: post
 comments:   true
 categories:
+- Android
 tags:
 ---
 

@@ -4,6 +4,7 @@ updated: 2015-04-30 07:30:00
 layout: post
 comments:   true
 categories:
+- 系统
 - Ubuntu
 ---
 
