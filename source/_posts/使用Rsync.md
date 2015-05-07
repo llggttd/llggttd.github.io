@@ -14,15 +14,19 @@ categories:
 
 本地文件同步，即SRC和DES在同一台机器上。SRC可以指定多个目录或文件。如:
 
->rsync -arv ~/www /var/www
+``` sh
+rsync -arv ~/www /var/www
+```
 
 - rsync [OPTION]... SRC [SRC]... [USER@]HOST:DEST
 
 使用一个远程shell程序(如rsh、ssh)来实现将本地机器的内容拷贝到远程机器。
 DEST有两种写法：相对当前用户家目录的路径和绝对路径。如:
 
->rsync -arv test ozone@crazyman.top:temp
->rsync -arv test ozone@crazyman.top:/home/ozone/temp
+``` sh
+rsync -arv test ozone@crazyman.top:temp
+rsync -arv test ozone@crazyman.top:/home/ozone/temp
+```
 
 - rsync [OPTION]... SRC [SRC]... [USER@]HOST::DEST
 
@@ -30,32 +34,42 @@ DEST有两种写法：相对当前用户家目录的路径和绝对路径。如:
 DEST此时不再是路径，而是再服务器上rsync配置的模块名称。rsync的具体配置以后我会详细讲解。
 如：
 
->rsync -arv test ozone@crazyman.top::www
+``` sh
+rsync -arv test ozone@crazyman.top::www
+```
 
 - rsync [OPTION]... SRC [SRC]... rsync://[USER@]HOST[:PORT]/DEST
 
 从本地机器拷贝文件到远程rsync服务器中。和使用"rsync [OPTION]... SRC [SRC]... [USER@]HOST::DEST"相同， 此时的DEST也是模块名称，不是路径。如：
 
->rsync -arv test rsync://ozone@crazyman.top/www
+``` sh
+rsync -arv test rsync://ozone@crazyman.top/www
+```
 
 - rsync [OPTION]... [USER@]HOST:SRC [DEST]
 
 使用一个远程shell程序(如rsh、ssh)来实现将远程机器的内容拷贝到本地机器。SRC有两种写法：相对当前用户家目录的路径和绝对路径。当DEST省略时，只显示远程文件列表，不进行实际的拷贝工作。如:
 
->rsync -arv ozone@crazyman.top:temp test 
->rsync -arv ozone@crazyman.top:/home/ozone/temp test 
+``` sh
+rsync -arv ozone@crazyman.top:temp test 
+rsync -arv ozone@crazyman.top:/home/ozone/temp test 
+```
 
 - rsync [OPTION]... [USER@]HOST::SRC [DEST]
 
 从远程rsync服务器中拷贝文件到本地机。SRC此时不再是路径，而是再服务器上rsync配置的模块名称。如：
 
->rsync -arv ozone@crazyman.top::www test
+``` sh
+rsync -arv ozone@crazyman.top::www test
+```
 
 - rsync [OPTION]... rsync://[USER@]HOST[:PORT]/SRC [DEST]
 
 从远程rsync服务器中拷贝文件到本地机。和使用"rsync [OPTION]... [USER@]HOST::SRC [DEST]"相同， 此时的DEST也是模块名称，不是路径。如：
 
->rsync -arv rsync://ozone@crazyman.top/www test
+``` sh
+rsync -arv rsync://ozone@crazyman.top/www test
+```
 
 几个需要注意的地方：
 
