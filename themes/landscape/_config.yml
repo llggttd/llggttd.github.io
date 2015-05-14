@@ -9,7 +9,7 @@ rss: atom.xml
 excerpt_link: 更多
 fancybox: true
 
-favicon: favicon.png
+favicon: /favicon.png
 # Sidebar
 sidebar: right
 widgets:
