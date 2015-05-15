@@ -1,14 +1,15 @@
 # Header
 menu:
-  首页: /
-  存档: /archives
-  关于: /about
-rss: /atom.xml
+  首页: index.html
+  存档: archives
+  关于: about
+rss: atom.xml
 
 # Content
 excerpt_link: 更多
 fancybox: true
 
+favicon: /favicon.png
 # Sidebar
 sidebar: right
 widgets:
