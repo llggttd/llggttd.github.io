@@ -71,3 +71,71 @@ int main(int argc, char const *argv[]) {
     return 0;
 }
 ```
+
+也可以使用函数的方法
+
+``` c
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <syslog.h>
+
+void daemonize() {
+    switch(fork()) {
+        case 0:
+            break;
+        case -1:
+            exit(1);
+        default:
+            exit(0);
+    }
+
+    //创建新的会话
+    setsid();
+
+    //设置新的权限掩码
+    umask(0);
+
+    //更改当前目录
+    chdir("/tmp");
+
+    //关闭默认打开的标准输入、输出、错误文件
+    close(STDIN_FILENO);
+    close(STDOUT_FILENO);
+    close(STDERR_FILENO);
+}
+
+
+int main(int argc, char const *argv[]) {
+    
+    const char *log_file = "main.log";
+    int count = 0;
+    printf("father %d\n", getpid());
+    daemonize();
+
+    //打开新的文件接收程序的的输出
+    int fd_log = open(log_file, O_CREAT | O_RDWR, 0777);
+    if (fd_log == -1){
+        return 2;
+    }
+
+    //绑定日志文件到子进程的标准输出
+    //当在主进程中没有对标准输入输出进行过读写操作，即使绑定新的文件到标准输入输出，
+    //在子进程中对标准输入输出的的操作也不会生效
+    dup2(fd_log, STDIN_FILENO);
+    dup2(fd_log, STDOUT_FILENO);
+    dup2(fd_log, STDERR_FILENO);
+
+    while(1) {
+        printf("This come form %d, #%d\n", getpid(), count);
+        sleep(5);
+        count++;
+    }
+    
+    return 0;
+}
+```
+
