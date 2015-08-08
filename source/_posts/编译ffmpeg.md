@@ -30,7 +30,7 @@ ffmpeg的每一个组件单独编译成.so库，通过android的jni技术，使�
 实现我们想要的功能。
 
 ``` bash
-#!/bin/sh
+#!/bin/bash
 
 # NDK的路径，根据自己的安装位置进行设置
 NDK=/Users/uniflor/Apps/android-ndk
@@ -46,40 +46,31 @@ PLATFORM=$NDK/platforms/android-14/arch-arm
 # 根据自己安装的NDK版本来确定，一般使用最新的版本
 TOOLCHAIN=$NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64
 
-# 编译设置
 ARCH=arm
-PREFIX=$(pwd)/android/$ARCH
-ADDI_CFLAGS="-marm"
+TARGETOS=android
+PREFIX=$(pwd)/$TARGETOS/$ARCH
 ADDITIONAL_CONFIGURE_FLAG=
 
-# 为了减小生成库的体积要做以下设置
-# 关闭功能
-# - disable-doc 不生成文档
-# - disable-programs 不生成命令行工具
-# - disable-avdevice 不生成设备支持模块
-# - disable-indevs disable-outdevs 关闭对输入输出设置的支持
-# - disable-protocols enable-protocol=file 只打开文件支持
-
 ./configure \
-    --target-os=linux \
+    --prefix=$PREFIX \
     --enable-shared \
     --disable-static \
     --disable-doc \
     --disable-programs \
-    --disable-avdevice \
-    --disable-indevs \
-    --disable-outdevs \
     --enable-small \
+    --disable-avdevice \
+    --disable-devices \
     --disable-protocols \
     --enable-protocol=file \
     --enable-cross-compile \
-    --prefix=$PREFIX \
     --cross-prefix=$TOOLCHAIN/bin/arm-linux-androideabi- \
-    --arch="$ARCH" \
     --sysroot=$PLATFORM \
-    --extra-cflags="-Os -fpic $ADDI_CFLAGS" \
-    --extra-ldflags="$ADDI_LDFLAGS"
+    --extra-cflags="-Os -fpic" \
+    --extra-ldflags="$ADDI_LDFLAGS" \
+    --arch="$ARCH" \
+    --target-os="$TARGETOS"
 
+make clean
 make
 make install
 ```
@@ -119,39 +110,29 @@ PLATFORM=$NDK/platforms/android-14/arch-arm
 # 根据自己安装的NDK版本来确定，一般使用最新的版本
 TOOLCHAIN=$NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64
 
-# 编译设置
 ARCH=arm
-PREFIX=$(pwd)/android/$ARCH
-ADDI_CFLAGS="-marm"
+TARGETOS=android
+PREFIX=$(pwd)/$TARGETOS/$ARCH
 ADDITIONAL_CONFIGURE_FLAG=
 
-# 为了减小生成库的体积要做以下设置
-# 关闭功能
-# - disable-doc 不生成文档
-# - disable-programs 不生成命令行工具
-# - disable-avdevice 不生成设备支持模块
-# - disable-indevs disable-outdevs 关闭对输入输出设置的支持
-# - disable-protocols enable-protocol=file 只打开文件支持
-
 ./configure \
-    --target-os=linux \
+    --prefix=$PREFIX \
     --enable-shared \
     --disable-static \
     --disable-doc \
     --disable-programs \
-    --disable-avdevice \
-    --disable-indevs \
-    --disable-outdevs \
     --enable-small \
+    --disable-avdevice \
+    --disable-devices \
     --disable-protocols \
     --enable-protocol=file \
     --enable-cross-compile \
-    --prefix=$PREFIX \
     --cross-prefix=$TOOLCHAIN/bin/arm-linux-androideabi- \
-    --arch="$ARCH" \
     --sysroot=$PLATFORM \
-    --extra-cflags="-Os -fpic $ADDI_CFLAGS" \
-    --extra-ldflags="$ADDI_LDFLAGS"
+    --extra-cflags="-Os -fpic" \
+    --extra-ldflags="$ADDI_LDFLAGS" \
+    --arch="$ARCH" \
+    --target-os="$TARGETOS"
 
 make clean
 make
