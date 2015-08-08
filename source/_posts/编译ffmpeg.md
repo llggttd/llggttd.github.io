@@ -1,11 +1,13 @@
 title: "编译可供Android使用的FFmpeg库"
 date: 2015-05-06 14:23:42
+updated: 2015-08-05 10:34:45
 tags:
 categories:
 - Android
 ---
 
 FFmpeg是一套强大的音、视频处理工具。常用来对音频、视频进行合并或分离、拼接、剪裁，音频视频的转码等，还有非常强大的视频采集、视频抓图、给视频加水印等功能。主要组件：
+
 - libavformat：用于各种音视频封装格式的生成和解析，包括获取解码所需信息以生成解码上下文结构
 和读取音视频帧等功能；
 - libavcodec：用于各种类型声音/图像编解码；
@@ -18,7 +20,7 @@ FFmpeg是一套强大的音、视频处理工具。常用来对音频、视频�
 
 ## 编译FFmpeg
 
-+ 下载[ffmpeg]()
++ 下载[ffmpeg](http://ffmpeg.org/download.html)
 
 本测试使用的版本为2.6.1， 使用其它版本时请灵活变通
 
@@ -27,39 +29,59 @@ FFmpeg是一套强大的音、视频处理工具。常用来对音频、视频�
 ffmpeg的每一个组件单独编译成.so库，通过android的jni技术，使用c调用这些.so库中的方法，
 实现我们想要的功能。
 
-``` sh
+``` bash
 #!/bin/sh
+
 # NDK的路径，根据自己的安装位置进行设置
 NDK=/Users/uniflor/Apps/android-ndk
+
+# 编译针对的平台，可以根据自己的需求进行设置
+# 这里选择最低支持android-14, arm架构，生成的so库是放在
+# libs/armeabi文件夹下的，若针对x86架构，要选择arch-x86
 PLATFORM=$NDK/platforms/android-14/arch-arm
+
+
 # 工具链的路径，根据编译的平台不同而不同
+# arm-linux-androideabi-4.9与上面设置的PLATFORM对应，4.9为工具的版本号，
+# 根据自己安装的NDK版本来确定，一般使用最新的版本
 TOOLCHAIN=$NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64
 
-CPU=arm
-PREFIX=$(pwd)/android/$CPU
+# 编译设置
+ARCH=arm
+PREFIX=$(pwd)/android/$ARCH
 ADDI_CFLAGS="-marm"
 ADDITIONAL_CONFIGURE_FLAG=
 
+# 为了减小生成库的体积要做以下设置
+# 关闭功能
+# - disable-doc 不生成文档
+# - disable-programs 不生成命令行工具
+# - disable-avdevice 不生成设备支持模块
+# - disable-indevs disable-outdevs 关闭对输入输出设置的支持
+# - disable-protocols enable-protocol=file 只打开文件支持
+
 ./configure \
+    --target-os=linux \
     --enable-shared \
     --disable-static \
     --disable-doc \
-    --disable-ffplay \
-    --disable-ffprobe \
-    --disable-ffserver \
-    --disable-symver \
+    --disable-programs \
     --disable-avdevice \
+    --disable-indevs \
+    --disable-outdevs \
+    --enable-small \
     --disable-protocols \
     --enable-protocol=file \
-    --disable-doc \
     --enable-cross-compile \
     --prefix=$PREFIX \
     --cross-prefix=$TOOLCHAIN/bin/arm-linux-androideabi- \
-    --target-os=linux \
-    --arch=arm \
+    --arch="$ARCH" \
     --sysroot=$PLATFORM \
     --extra-cflags="-Os -fpic $ADDI_CFLAGS" \
     --extra-ldflags="$ADDI_LDFLAGS"
+
+make
+make install
 ```
 
 等待几分钟，命令运行结束后会在ffmpeg目录下生成一个anroid/arm的目录，
@@ -80,35 +102,56 @@ ADDITIONAL_CONFIGURE_FLAG=
 
 如果感觉生成的库太多，调用时一一加载麻烦，可以把这些库合并成一个库。
 
-``` sh
-#!/bin/sh
+``` bash
+#!/bin/bash
+
 # NDK的路径，根据自己的安装位置进行设置
 NDK=/Users/uniflor/Apps/android-ndk
+
+# 编译针对的平台，可以根据自己的需求进行设置
+# 这里选择最低支持android-14, arm架构，生成的so库是放在
+# libs/armeabi文件夹下的，若针对x86架构，要选择arch-x86
 PLATFORM=$NDK/platforms/android-14/arch-arm
+
+
 # 工具链的路径，根据编译的平台不同而不同
+# arm-linux-androideabi-4.9与上面设置的PLATFORM对应，4.9为工具的版本号，
+# 根据自己安装的NDK版本来确定，一般使用最新的版本
 TOOLCHAIN=$NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64
 
-CPU=arm
-PREFIX=$(pwd)/android/$CPU
+# 编译设置
+ARCH=arm
+PREFIX=$(pwd)/android/$ARCH
 ADDI_CFLAGS="-marm"
 ADDITIONAL_CONFIGURE_FLAG=
 
+# 为了减小生成库的体积要做以下设置
+# 关闭功能
+# - disable-doc 不生成文档
+# - disable-programs 不生成命令行工具
+# - disable-avdevice 不生成设备支持模块
+# - disable-indevs disable-outdevs 关闭对输入输出设置的支持
+# - disable-protocols enable-protocol=file 只打开文件支持
+
 ./configure \
+    --target-os=linux \
+    --enable-shared \
+    --disable-static \
     --disable-doc \
-    --disable-ffmpeg \
-    --disable-ffplay \
-    --disable-ffprobe \
-    --disable-ffserver \
-    --disable-symver \
-    --disable-doc \
+    --disable-programs \
+    --disable-avdevice \
+    --disable-indevs \
+    --disable-outdevs \
+    --enable-small \
+    --disable-protocols \
+    --enable-protocol=file \
     --enable-cross-compile \
     --prefix=$PREFIX \
     --cross-prefix=$TOOLCHAIN/bin/arm-linux-androideabi- \
-    --target-os=linux \
-    --arch=arm \
+    --arch="$ARCH" \
     --sysroot=$PLATFORM \
     --extra-cflags="-Os -fpic $ADDI_CFLAGS" \
-    --extra-ldflags="$ADDI_LDFLAGS" \
+    --extra-ldflags="$ADDI_LDFLAGS"
 
 make clean
 make
