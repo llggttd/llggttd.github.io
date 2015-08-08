@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>CrazyMan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description">
+<meta property="og:type" content="website">
+<meta property="og:title" content="CrazyMan">
+<meta property="og:url" content="https://blog.crazyman.top/page/3/index.html">
+<meta property="og:site_name" content="CrazyMan">
+<meta property="og:description">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CrazyMan">
+<meta name="twitter:description">
+  
+    <link rel="alternative" href="atom.xml" title="CrazyMan" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+<!--   <link href="//fonts.useso.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css"> -->
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">CrazyMan</a>
+      </h1>
+      
+        <h3 id="subtitle-wrap">
+          <p id="subtitle">NOTHING IS TRUE</p>
+        </h2>
+        <h3 id="subtitle-wrap">
+          <p id="subtitle">EVERYTHING IS PERMITTED</p>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/index.html">首页</a>
+        
+          <a class="main-nav-link" href="/archives">存档</a>
+        
+          <a class="main-nav-link" href="/about">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="atom.xml" title="RSS Feed"></a>
+        
+      </nav>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-Lua教程3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/05/04/Lua教程3/" class="article-date">
+  <time datetime="2015-05-04T14:46:09.000Z" itemprop="datePublished">2015-05-04</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/语言/">语言</a>►<a class="article-category-link" href="/categories/语言/LUA/">LUA</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/05/04/Lua教程3/">Lua教程三</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="面向对象">面向对象</h2><p><em>lua中本是没有对象这个东西的。但由于lua中有table这一强大的数据结构，<br>我们可以通过table来实现面向对象的结构</em></p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">user = &#123;name = <span class="string">"max"</span>, <span class="built_in">type</span> = <span class="string">"admin"</span>, hi = <span class="function"><span class="keyword">function</span><span class="params">(user)</span></span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"Hello, I am "</span> .. user.name)</span><br><span class="line"><span class="keyword">end</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 获取属性</span></span><br><span class="line"><span class="keyword">local</span> <span class="built_in">type</span> = user.<span class="built_in">type</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 调用方法</span></span><br><span class="line">user.hi(user)</span><br></pre></td></tr></table></figure>
+<p><em>这种结构看起来比较怪异，不符合我们一般对面向对象中类的认识，可以改进以下结构</em></p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">User = &#123;&#125;</span><br><span class="line"></span><br><span class="line">User.<span class="built_in">type</span> = <span class="string">"admin"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">User.new</span><span class="params">(name)</span></span></span><br><span class="line">    User.name = name</span><br><span class="line">    <span class="keyword">return</span> User</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">User.hi</span><span class="params">()</span></span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"Hi, I am "</span> .. User.name)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> user1 = User.new(<span class="string">"max"</span>)</span><br><span class="line">user1.hi()</span><br></pre></td></tr></table></figure>
+<p><em>这种结构起来要正常多了，但会有一个问题，在这段代码下再加几行</em></p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> user2 = User.new(<span class="string">"xxx"</span>)</span><br><span class="line">user2.hi() <span class="comment">-- 输出 "Hi, I am xxx"</span></span><br><span class="line">user1.hi() <span class="comment">-- 输出 "Hi, I am xxx"</span></span><br></pre></td></tr></table></figure>
+<p><em>创建新的实例user2后，表User的name被修改了，而user1引用的还是User，所以出错了。为了解决这个问题，再次改进一下结构</em></p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">User = &#123;&#125;</span><br><span class="line">User.<span class="built_in">type</span> = <span class="string">"admin"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">User.new</span><span class="params">(self, name)</span></span></span><br><span class="line">    instance = &#123;&#125;</span><br><span class="line">    instance.name = name</span><br><span class="line">    <span class="comment">-- 这里self指向的是表User, 表insance以User为模板</span></span><br><span class="line">    <span class="built_in">setmetatable</span>(instance, self)</span><br><span class="line">    self.__index = self</span><br><span class="line">    <span class="keyword">return</span> instance</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">User.hi</span><span class="params">(self)</span></span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"Hi, I am "</span> .. self.name)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> user1 = User.new(User, <span class="string">"max"</span>)</span><br><span class="line">user1:hi(user1)</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> user2 = User.new(User, <span class="string">"xxx"</span>)</span><br><span class="line">user2.hi(user2)</span><br><span class="line"></span><br><span class="line">user1.hi(user1)</span><br></pre></td></tr></table></figure>
+<p><em>现在结构清晰多了，而且创建的实例之间也不会互相影响了，但是这种结构需要在调用类的方法时把自己当成第一个参数传递给方法，写起来有些麻烦，所有lua中引入了新的操作符号”:”。通过”:”调用方法时会默认添加一个参数self, 指向调用者。对以下代码再次改进：</em></p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">User = &#123;&#125;</span><br><span class="line">User.<span class="built_in">type</span> = <span class="string">"admin"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">User:new</span><span class="params">(name)</span></span></span><br><span class="line">    instance = &#123;&#125;</span><br><span class="line">    instance.name = name</span><br><span class="line">    <span class="built_in">setmetatable</span>(instance, self)</span><br><span class="line">    self.__index = self</span><br><span class="line">    <span class="keyword">return</span> instance</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">User:hi</span><span class="params">()</span></span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"Hi, I am "</span> .. self.name)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> user1 = User:new(<span class="string">"max"</span>)</span><br><span class="line">user1:hi()</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> user2 = User:new(<span class="string">"xxx"</span>)</span><br><span class="line">user2:hi()</span><br><span class="line"></span><br><span class="line">user1:hi()</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.crazyman.top/2015/05/04/Lua教程3/" data-id="cid2q09gn000rnnarg7ey4u9r" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Lua教程2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/05/04/Lua教程2/" class="article-date">
+  <time datetime="2015-05-04T14:39:09.000Z" itemprop="datePublished">2015-05-04</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/语言/">语言</a>►<a class="article-category-link" href="/categories/语言/LUA/">LUA</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/05/04/Lua教程2/">Lua教程二</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="常用内置方法">常用内置方法</h2><ul>
+<li><p>type 判断数据类型</p>
+<p>  <em>type(arg)</em><br>  接收一个参数， 返回值为string类型</p>
+  <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> a = <span class="number">1</span></span><br><span class="line"><span class="keyword">local</span> b = <span class="string">"1"</span></span><br><span class="line"><span class="keyword">local</span> c = <span class="keyword">true</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(a), <span class="built_in">type</span>(b), <span class="built_in">type</span>(c))</span><br></pre></td></tr></table></figure>
+<p>  <em>返回值为八种数据类型其中之一：”nil”, “number”, “string”, “boolean”, “table”, “function”, “thread”, and “userdata”。</em></p>
+<p>  <em>注意返回的值都是字符串</em></p>
+</li>
+<li><p>print 打印信息</p>
+<p>  <em>print(arg1, arg2, …)</em><br>  <em>可以接收任意个数的参数，不支持格式化输出，要格式化输出，使用string.format()转化后输出</em></p>
+  <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> a = <span class="string">"Hello"</span></span><br><span class="line"><span class="keyword">local</span> b = <span class="string">"Lua"</span></span><br><span class="line"><span class="built_in">print</span>(a, b)</span><br><span class="line"><span class="built_in">print</span>(a .. <span class="string">","</span> .. b)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>tostring 转换成字符串类型</p>
+<p>  <em>tostring(arg)</em></p>
+</li>
+<li><p>tonumber 转换成数值类型</p>
+<p>  <em>tonumber(arg)</em></p>
+</li>
+<li><p>assert 断言</p>
+<p>  <em>assert(v, msg)</em><br>  <em>v为要判断的值，当v的值为false时， 打印错误，错误的描述为msg字符串</em><br>  <em>当v的值为false时，打印错误，程序会终止运行</em></p>
+  <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> i = <span class="number">0</span></span><br><span class="line"><span class="built_in">assert</span>(i &gt; <span class="number">0</span>, <span class="string">"can not run, i &lt;= 0"</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>pcall 在安全模式下调用方法</p>
+<p>  <em>pcall(func, arg1, arg2, …)</em><br>  <em>可以通过pcall(func)以安全模式调用方法，方法func执行成功，pcall返回true, func执行失败，返回false和一个错误描述</em></p>
+  <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">check</span><span class="params">()</span></span></span><br><span class="line">    <span class="keyword">local</span> id = <span class="number">12</span></span><br><span class="line">    <span class="built_in">assert</span>(id &gt; <span class="number">10</span>, <span class="string">"id can not less then 10"</span>)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> status, message = <span class="built_in">pcall</span>(check)</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> status <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">print</span>(message)</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"success"</span>)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>xpcall 与pcall相似</p>
+<p>  <em>xpcall(func, fh, arg1, arg2, …)</em><br>  <em>可以指定一个异常处理方法fh, 返回结果与pcall相同</em> </p>
+</li>
+<li><p>loadfile 加载外部lua文件</p>
+<p>  <em>loadfile(filename)</em><br>  <em>加载一个外部的lua文件， 返回一个function</em></p>
+  <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> runInit = <span class="built_in">loadfile</span>(<span class="string">"init.lua"</span>)</span><br><span class="line">runInit()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>dofile 执行外部lua文件</p>
+<p>  <em>dofile(filename)</em><br>  <em>加载一个外部的lua文件，并执行其中的语句, 返回值为外部lua文件的返回值</em></p>
+  <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> result = <span class="built_in">dofile</span>(<span class="string">"init.lua"</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>require 加载外部模块</p>
+<p>  <em>require(modname)</em><br>  <em>加载外部外部模块， 返回值为模块的返回值，具体加载过程参考package库部分</em></p>
+  <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> user = <span class="built_in">require</span>(<span class="string">"user"</span>)</span><br><span class="line">user.hello()</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="全局变量">全局变量</h2><p><em>_G</em></p>
+<p><em>lua语言内部全局变量，类型为table, 系统内置方法、加载的库、全局变量都存在这里</em></p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">xxxx = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;</span><br><span class="line"><span class="keyword">for</span> k,v <span class="keyword">in</span> <span class="built_in">pairs</span>(<span class="built_in">_G</span>) <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">print</span>(k,v)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<h2 id="内置库（模块）">内置库（模块）</h2><ul>
+<li><p>package</p>
+<p>  <em>管理通过require加载的模块</em><br>  <em>当通过require加载模块时，按一下列过程查找模块</em></p>
+<ul>
+<li>检查package.loaded, 若package.loaded[modname]不为nil,则返回 package.loaded[modname]的值</li>
+<li><p>若没有加载过，则通过以下四步查找模块</p>
+<ul>
+<li>查找package.preload里是否有对应的模块，有则返回，没有进入下一步</li>
+<li>根据package.path中的设置路径，拼合上模块的名称后，依次进行查找，找到后进行加载，找不到进入下一步</li>
+<li>与上一步相似，从package.cpath的路径中查找</li>
+<li>查找c库</li>
+</ul>
+<p><em>package.path， package.cpath,决定了加载模块时的查找路径，可以通过修改它们的值来添加模块加载路径</em></p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">package</span>.path = <span class="built_in">string</span>.format(<span class="string">"%s;%s"</span>, <span class="built_in">package</span>.path, <span class="string">"./mods/?.lua"</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">package</span>.path)</span><br></pre></td></tr></table></figure>
+<p><em>package.loaded保存了已经加载的模块， 当通过require加载模块成功后，模块会自动添加进package.loaded中</em></p>
+</li>
+</ul>
+</li>
+<li><p>table</p>
+<p>  <em>table模块提供了对table的基本操作方法</em></p>
+<ul>
+<li><p>table.insert (list, [pos,] value)<br>  <em>向list中插入元素</em><br>  <em>pos为要插入的位置，插入后pos之后的元素索引自动调整， 省略时，元素插入到list的末尾</em></p>
+  <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> t = &#123;<span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">8</span>&#125;</span><br><span class="line"><span class="built_in">table</span>.insert(t, <span class="number">10</span>)</span><br><span class="line"><span class="built_in">table</span>.insert(t, <span class="number">3</span>, <span class="number">12</span>)</span><br><span class="line"><span class="keyword">for</span> i,v <span class="keyword">in</span> <span class="built_in">ipairs</span>(t) <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">print</span>(i,v)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>table.remove (list [, pos])<br>  <em>移除list中的元素</em><br>  <em>pos为要移除元素的位置，取值1到#list, 移除后pos之后元素的索引自动调整，省略时移除末尾的元素</em></p>
+  <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> t = &#123;<span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">8</span>&#125;</span><br><span class="line"><span class="built_in">table</span>.remove(t, <span class="number">3</span>)</span><br><span class="line"><span class="keyword">for</span> i, k <span class="keyword">in</span> <span class="built_in">pairs</span>(t) <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">print</span>(i, k)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>table.move (a1, f, e, t [,a2])<br>  <em>移动table中的元素</em><br>  <em>a1为源table, a2为目的table, a2省略时，a1同时为目的table</em><br>  <em>f和e为源table中要移动的元素的起始和终止位置， t为为目的table中的起始位置</em></p>
+  <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> x = &#123;<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>, <span class="string">"d"</span>&#125;</span><br><span class="line"><span class="keyword">local</span> y = &#123;<span class="string">"e"</span>, <span class="string">"f"</span>, <span class="string">"g"</span>, <span class="string">"h"</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 移动x中的第1，2个元素到第4个位置</span></span><br><span class="line"><span class="comment">-- 移动后x中元素为a,b,c,a,b， 原来位置的元素被覆盖，长度也增加了</span></span><br><span class="line"><span class="built_in">table</span>.move(x, <span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>)</span><br><span class="line"><span class="keyword">for</span> i,v <span class="keyword">in</span> <span class="built_in">pairs</span>(x) <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">print</span>(i,v)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 移动x中的b, c 到y的1，2位置</span></span><br><span class="line"><span class="comment">-- 移动后y中的元素为b,c,g,h</span></span><br><span class="line"><span class="built_in">table</span>.move(x, <span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>, y)</span><br><span class="line"><span class="keyword">for</span> i,v <span class="keyword">in</span> <span class="built_in">pairs</span>(y) <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">print</span>(i,v)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>table.concat (list [, sep [, i [, j]]])<br>  <em>连接list中的元素</em><br>  <em>sep为连接字符串， i为起始位置， j为终止位置</em></p>
+  <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> t3 = &#123;<span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">8</span>&#125;</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">table</span>.concat(t3, <span class="string">"-"</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">table</span>.concat(t3, <span class="string">"--"</span>, <span class="number">2</span>, <span class="number">4</span>))</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>table.sort (list [, comp])<br>  <em>对table的元素进行排序</em><br>  <em>comp为排序函数，该函数接收两个参数，但函数返回值为true不交换传入的两个参数的位置，返回值为false则交换两个参数的位置</em><br>  <em>comp省略时，默认使用以下排序函数：</em></p>
+  <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span><span class="params">(x, y)</span></span></span><br><span class="line">    <span class="keyword">return</span> x &lt; y</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+  <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> t = &#123;<span class="number">34</span>, <span class="number">29</span>, <span class="number">88</span>, <span class="number">99</span>, <span class="number">123</span>&#125;</span><br><span class="line"><span class="built_in">table</span>.sort(t, <span class="function"><span class="keyword">function</span><span class="params">(a, b)</span></span></span><br><span class="line">    <span class="keyword">return</span> a &gt; b</span><br><span class="line"><span class="keyword">end</span>)</span><br><span class="line"><span class="keyword">for</span> i,v <span class="keyword">in</span> <span class="built_in">ipairs</span>(t7) <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">print</span>(i,v)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>table.pack (···)<br>  <em>把传入的参数打包成一个table，并加入一个元素”n”, 值为打包进table的元素个数</em></p>
+  <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> a = <span class="number">123</span></span><br><span class="line"><span class="keyword">local</span> b = <span class="number">234</span></span><br><span class="line"><span class="keyword">local</span> c = <span class="number">345</span></span><br><span class="line"><span class="keyword">local</span> t = <span class="built_in">table</span>.pack(a, b, c)</span><br><span class="line"><span class="keyword">for</span> k,v <span class="keyword">in</span> <span class="built_in">pairs</span>(t) <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">print</span>(k,v)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>table.unpack (list [, i [, j]])<br>  <em>把table 拆开, 只会返回数字索引元素的值</em><br>  <em>i为起始元素的索引，j为终止元素的索引</em></p>
+  <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> t = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, s = <span class="number">4</span>, <span class="number">5</span>&#125;</span><br><span class="line"><span class="keyword">local</span> x, y, z, n = <span class="built_in">table</span>.<span class="built_in">unpack</span>(t)</span><br><span class="line"><span class="built_in">print</span>(x, y, z, n)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>string</p>
+<p>  <em>对字符串进行处理</em></p>
+<ul>
+<li>string.byte(s, i, j)</li>
+<li>string.char(…)</li>
+<li>string.find (s, pattern [, init [, plain]])</li>
+<li>string.dump (function [, strip])</li>
+<li>string.format(format, …)</li>
+<li>string.gmatch (s, pattern)</li>
+<li>string.gsub (s, pattern, repl [, n])</li>
+<li>string.len (s)</li>
+<li>string.lower (s)</li>
+<li>string.match (s, pattern [, init])</li>
+<li>string.pack (fmt, v1, v2, ···)</li>
+<li>string.packsize (fmt)</li>
+<li>string.rep (s, n [, sep])</li>
+<li>string.reverse (s)</li>
+<li>string.sub (s, i [, j])</li>
+<li>string.unpack (fmt, s [, pos])</li>
+<li>string.upper (s)</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>math</p>
+<p>  <em>数学常用函数库</em></p>
+<ul>
+<li><p>math.abs (x)</p>
+</li>
+<li><p>math.acos (x)</p>
+</li>
+<li><p>math.asin (x)</p>
+</li>
+<li><p>math.atan (y [, x])</p>
+</li>
+<li><p>math.ceil (x)</p>
+</li>
+<li><p>math.cos (x)</p>
+</li>
+<li><p>math.deg (x)</p>
+</li>
+<li><p>math.exp (x)</p>
+</li>
+<li><p>math.floor (x)</p>
+</li>
+<li><p>math.fmod (x, y)</p>
+</li>
+<li><p>math.log (x [, base])</p>
+</li>
+<li><p>math.max (x, ···)</p>
+</li>
+<li><p>math.min (x, ···)</p>
+</li>
+<li><p>math.modf (x)</p>
+</li>
+<li><p>math.rad (x)</p>
+</li>
+<li><p>math.random ([m [, n]])</p>
+</li>
+<li><p>math.randomseed (x)</p>
+</li>
+<li><p>math.sin (x)</p>
+</li>
+<li><p>math.sqrt (x)</p>
+</li>
+<li><p>math.tan (x)</p>
+</li>
+<li><p>math.tointeger (x)</p>
+</li>
+<li><p>math.type (x)</p>
+</li>
+<li><p>math.ult (m, n)</p>
+</li>
+</ul>
+</li>
+<li><p>io</p>
+<p>  <em>io库提供对标准输入输出以及文件的基本操作</em></p>
+<ul>
+<li><p>io.close ([file]) 关闭打开的文件，省略参数时，关闭当前默认的输出文件</p>
+</li>
+<li><p>io.flush () 把对文件进行的改动写到文件中， 等同于io.output():flush()</p>
+</li>
+<li><p>io.input ([file]) 设置文件为默认的输入文件，省略参数时设置，返回当前默认的输入文件</p>
+</li>
+<li><p>io.lines ([filename ···]) 打开文件并返回一个行遍历器</p>
+</li>
+<li><p>io.open (filename [, mode]) 以指定的模式打开一个文件，返回文件句柄</p>
+<p>  <em>打开方式：</em></p>
+<ul>
+<li>“r”: 只读（默认）</li>
+<li>“w”: 只写</li>
+<li>“a”: 追加</li>
+<li>“r+”: 更新，先前的内容保留</li>
+<li>“w+”: 更新，先前的内容清空</li>
+<li>“a+”: 从末尾添加</li>
+</ul>
+</li>
+<li><p>io.output ([file]) 设置文件为默认的输出文件，省略参数时设置，返回当前默认的输出文件</p>
+</li>
+<li><p>io.popen (prog [, mode]) 在新的进程中打开文件， 不是在所有的平台上可用</p>
+</li>
+<li><p>io.read (···) 读取文件的内容</p>
+</li>
+<li><p>io.tmpfile () 创建一个堆里零时文件，返回这个文件的句柄，程序结束后会自动删除这个文件</p>
+</li>
+<li><p>io.type (obj) 检测obj是否是一个打开的文件句柄，返回值为”file”, “closed file”, nil</p>
+</li>
+<li><p>io.write (···) 向当前输出文件写入内容</p>
+</li>
+</ul>
+</li>
+<li><p>os</p>
+<p>  <em>封装了一些秕方法</em></p>
+<ul>
+<li><p>os.clock () 返回CPU时间的近似值</p>
+</li>
+<li><p>os.date ([format [, time]]) 返回系统日期</p>
+<p>  <em>返回两种形式的结果， 参数字符串为’</em>t’时，返回table, 参数为格式化字符串时，返回日期的字符串<em>
+  </em>格式化参数*</p>
+<ul>
+<li>%a 星期几的简写</li>
+<li>%A 星期几的全称</li>
+<li>%b 月份的简写</li>
+<li>%B 月份的全称</li>
+<li>%c 标准的日期的时间串</li>
+<li>%C 年份的前两位数字</li>
+<li>%d 十进制表示的每月的第几天</li>
+<li>%D 月/天/年</li>
+<li>%e 在两字符域中，十进制表示的每月的第几天</li>
+<li>%F 年-月-日</li>
+<li>%g 年份的后两位数字，使用基于周的年</li>
+<li>%G 年份，使用基于周的年</li>
+<li>%h 简写的月份名</li>
+<li>%H 24小时制的小时</li>
+<li>%I 12小时制的小时</li>
+<li>%j 十进制表示的每年的第几天</li>
+<li>%m 十进制表示的月份</li>
+<li>%M 十时制表示的分钟数</li>
+<li>%n 新行符</li>
+<li>%p 本地的AM或PM的等价显示</li>
+<li>%r 12小时的时间</li>
+<li>%R 显示小时和分钟：hh:mm</li>
+<li>%S 十进制的秒数</li>
+<li>%t 水平制表符</li>
+<li>%T 显示时分秒：hh:mm:ss</li>
+<li>%u 每周的第几天，星期一为第一天 （值从1到7，星期一为1）</li>
+<li>%U 第年的第几周，把星期日作为第一天（值从0到53）</li>
+<li>%V 每年的第几周，使用基于周的年</li>
+<li>%w 十进制表示的星期几（值从0到6，星期天为0）</li>
+<li>%W 每年的第几周，把星期一做为第一天（值从0到53）</li>
+<li>%x 标准的日期串</li>
+<li>%X 标准的时间串</li>
+<li>%y 不带世纪的十进制年份（值从0到99）</li>
+<li>%Y 带世纪部分的十制年份</li>
+<li>%z，%Z 时区名称，如果不能得到时区名称则返回空字符。</li>
+<li>%% 百分号</li>
+</ul>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="built_in">os</span>.date(<span class="string">"%D"</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">os</span>.data())</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>os.time ([table])返回时间值</p>
+<p>  <em>不带参数时返回当前时间值，有参数时把传入的时间转为时间值</em></p>
+  <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="built_in">os</span>.time())</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">os</span>.time(&#123;year = <span class="number">2015</span>, month = <span class="number">3</span>, day = <span class="number">19</span>, hour = <span class="number">12</span>, min = <span class="number">0</span>, sec = <span class="number">0</span>&#125;))</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>os.difftime (t2, t1) 返回时间差，单位为秒（t2-t1)</p>
+</li>
+<li><p>os.execute ([command]) 执行系统命令</p>
+</li>
+<li><p>os.exit ([code [, close]]) 终止宿主程序</p>
+</li>
+<li><p>os.getenv (varname) 返回当前程序的环境变量</p>
+</li>
+<li><p>os.remove (filename) 删除文件</p>
+</li>
+<li><p>os.rename (oldname, newname) 文件重命名</p>
+</li>
+<li><p>os.setlocale (locale [, category]) 设置程序的当前设置</p>
+</li>
+<li><p>os.tmpname () 返回一个零时文件名，在unix-like系统上，会创建相应的文件</p>
+</li>
+</ul>
+</li>
+<li><p>utf8</p>
+<p>  <em>提供对utf8编码的支持</em></p>
+</li>
+<li><p>debug</p>
+<p>  <em>提供一些与调试相关的方法</em></p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.crazyman.top/2015/05/04/Lua教程2/" data-id="cid2q09gp000wnnar69fkhml7" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Lua教程1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/05/04/Lua教程1/" class="article-date">
+  <time datetime="2015-05-04T14:38:09.000Z" itemprop="datePublished">2015-05-04</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/语言/">语言</a>►<a class="article-category-link" href="/categories/语言/LUA/">LUA</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/05/04/Lua教程1/">Lua教程一</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="变量">变量</h2><ul>
+<li>动态类型， 变量无类型， 值才有类型</li>
+<li>区分大小写</li>
+<li>不要以’_大写字母’开头命名变量，这是lua 内部变量的全名规则</li>
+<li>未初始化的变量的值为nil (demo)</li>
+<li>多重赋值， 可以不对称 (demo)</li>
+</ul>
+<p>##数据类型</p>
+<ul>
+<li>共8种数据类型</li>
+<li>都是一等公民，可以做作为参数， 也可以作为返回值</li>
+</ul>
+<p>###number</p>
+<pre><code>数值类型， <span class="number">1.2</span>, <span class="number">10</span>等
+lua <span class="number">5.3</span>之前， 无论是整形还是浮点运算时都转换成浮点型
+</code></pre><p>###string</p>
+<pre><code><span class="string">"hello"</span>, <span class="string">"hello\n world"</span>
+</code></pre><p>###boolean</p>
+<pre><code><span class="literal">true</span>, <span class="literal">false</span>
+只有nil, <span class="literal">false</span>的值为假，其它值都为正
+*注意: <span class="number">0</span>， <span class="string">""</span>， {}的值都是<span class="literal">true</span>*
+</code></pre><p>###table</p>
+<pre><code>存储键、值对，
+{
+    key = value,
+    key = value,
+    ...
+}
+键可以为除了nil以外的其它任意类型
+当键对应的值为nil时，这对键值会被忽略
+
+
+<span class="comment"><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">info = &#123;</span><br><span class="line">    name = <span class="string">"uniflor"</span>,</span><br><span class="line">    <span class="number">4</span> = <span class="string">"TianJin"</span>,</span><br><span class="line">    callback = <span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"ok"</span>)</span><br><span class="line">    <span class="keyword">end</span>,</span><br><span class="line">    status = <span class="keyword">true</span>,</span><br><span class="line">    size = &#123;</span><br><span class="line">        width = <span class="number">200</span>,</span><br><span class="line">        height = <span class="number">100</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></span>
+
+*在对table进行遍历时，字符串索引的元素位置与书写的顺序无关*
+</code></pre><p>###function</p>
+<pre><code>*同其它语言中的函数*
+*两种定义方式*
+*参数可变，按顺序对应*
+*可以返回多个值*
+
+<span class="comment"><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span><span class="params">()</span></span></span><br><span class="line">    <span class="keyword">local</span> a = <span class="number">1</span></span><br><span class="line">    <span class="keyword">local</span> b = <span class="number">2</span></span><br><span class="line">    <span class="keyword">return</span> a, b</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> test = <span class="function"><span class="keyword">function</span><span class="params">(x, y)</span></span></span><br><span class="line">    <span class="keyword">local</span> a = <span class="number">1</span> + x</span><br><span class="line">    <span class="keyword">local</span> b = <span class="number">2</span> + y</span><br><span class="line">    <span class="keyword">return</span> a, b</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></span>
+</code></pre><p>###nil</p>
+<pre><code>定义变量，不赋值时，系统会自动赋值 <span class="keyword">nil</span>
+变量没有值，变量未定义，记住写法，<span class="string">"nil"</span>
+</code></pre><p>###userdata</p>
+<pre><code>代表<span class="built_in">c</span>中内存的一块原生数据或指向原生数据的指针
+</code></pre><p>###thread</p>
+<pre><code>Lua中协程程序中的线程，与所运行的平台无关
+</code></pre><p>与类型相关的方法：</p>
+<pre><code>- <span class="typedef"><span class="keyword">type</span></span>
+</code></pre><hr>
+<h2 id="关键词">关键词</h2><pre><code>and       break     <span class="operator"><span class="keyword">do</span>        <span class="keyword">else</span>      elseif    <span class="keyword">end</span>
+<span class="literal">false</span>     <span class="keyword">for</span>       <span class="keyword">function</span>  <span class="keyword">goto</span>      <span class="keyword">if</span>        <span class="keyword">in</span>
+<span class="keyword">local</span>     nil       <span class="keyword">not</span>       <span class="keyword">or</span>        <span class="keyword">repeat</span>    <span class="keyword">return</span>
+<span class="keyword">then</span>      <span class="literal">true</span>      <span class="keyword">until</span>     <span class="keyword">while</span></span>
+</code></pre><h2 id="语法标记">语法标记</h2><pre><code>+     -     *     /     %     ^     #
+&amp;     ~     |     &lt;&lt;    &gt;&gt;    //
+<span class="header">==    ~=    &lt;=    &gt;=    &lt;     &gt;     =</span>
+<span class="bullet">(     )     {     }     [     ]     ::
+</span>;     :     ,     .     ..    ...
+</code></pre><p><em>与其它语言不同的地方：</em></p>
+<ul>
+<li>//</li>
+<li>~=</li>
+<li>#</li>
+<li>..</li>
+<li>…</li>
+</ul>
+<h2 id="运算符">运算符</h2><ul>
+<li>+: 加</li>
+<li>-: 减</li>
+<li>*: 乘</li>
+<li>/: 除</li>
+<li>//: 取商运算</li>
+<li>%: 取余运算</li>
+<li>^: 乘方</li>
+<li>-: 一元减</li>
+</ul>
+<h2 id="逻辑运算">逻辑运算</h2><ul>
+<li>and 逻辑与</li>
+<li>or  逻辑或</li>
+<li>not 逻辑非</li>
+</ul>
+<p><em>没有&amp;&amp;, ||, !操作符</em></p>
+<ul>
+<li>==: 相等 先判断类型是否相同，再判断值是否相同</li>
+<li>~=: 不相等</li>
+<li>&lt;: 小于</li>
+<li>>: 大于</li>
+<li>&lt;=: 小于等于</li>
+<li>>=: 大于等于</li>
+</ul>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> id &gt;= <span class="number">10</span> <span class="keyword">and</span> price &lt;<span class="number">5</span> <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">""</span>)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> exist = <span class="keyword">false</span></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> exist <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"do not exist"</span>)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<h2 id="流程控制">流程控制</h2><ul>
+<li><p>if-else-end 结构</p>
+<p>  <em>注意语句体前面的then，这与java, C不同</em></p>
+  <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> a</span><br><span class="line"><span class="keyword">if</span> a &gt; <span class="number">100</span> <span class="keyword">then</span></span><br><span class="line">    ...</span><br><span class="line"><span class="keyword">elseif</span> a &gt; <span class="number">50</span> <span class="keyword">then</span></span><br><span class="line">    ...</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    ...</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>while-do-end 结构</p>
+<p>  <em>在while-do-end中可以使用break跳出循环，但没有continue语句</em></p>
+  <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> a = <span class="number">10</span></span><br><span class="line"><span class="keyword">while</span> a &gt; <span class="number">0</span> <span class="keyword">do</span></span><br><span class="line">    ...</span><br><span class="line">    a = a - <span class="number">1</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>repeat-until 结构</p>
+<p>  <em>在repeat-until中，until之后的表达式与repeat中的语句在一个语句体中，所以在until中可以引用repeat中语句块的局部变量, 而在while-do-end结构中不行</em></p>
+  <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> u = <span class="number">10</span></span><br><span class="line"><span class="keyword">repeat</span></span><br><span class="line">    ...</span><br><span class="line">    u = u - <span class="number">1</span></span><br><span class="line"><span class="keyword">until</span> u &lt; <span class="number">0</span></span><br></pre></td></tr></table></figure>
+  <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> u = <span class="number">10</span></span><br><span class="line"><span class="keyword">repeat</span></span><br><span class="line">    <span class="keyword">local</span> j = u</span><br><span class="line">    u = u - <span class="number">1</span></span><br><span class="line">    <span class="built_in">print</span>(j)</span><br><span class="line"><span class="keyword">until</span> j &lt; <span class="number">0</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>for-do-end 结构</p>
+<p>  <em>第一个参数是起始值</em><br>  <em>第二个参数是终止值</em><br>  <em>第三个参数是步进值, 可以省略，默认为1</em><br>  <em>循环变量前虽没有local修饰，但也是for-do-end语句体中的局部变量</em></p>
+  <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i = <span class="number">1</span>, <span class="number">10</span>, <span class="number">3</span> <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">print</span>(i)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="built_in">print</span>(i)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>for-in-do-end 结构</p>
+<p>  <em>lua中两种table的遍历结构</em><br>  <em>ipairs()只遍历table中以数字为索引的元素</em><br>  <em>paires()遍历table中所有的元素</em></p>
+  <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> user = &#123;<span class="number">12</span>, <span class="number">14</span>, <span class="number">15</span>, name = <span class="string">"max"</span>&#125;</span><br><span class="line"><span class="keyword">for</span> i,v <span class="keyword">in</span> <span class="built_in">ipairs</span>(user) <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">print</span>(i,v)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+  <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> user = &#123;<span class="number">12</span>, <span class="number">14</span>, <span class="number">15</span>, name = <span class="string">"max"</span>&#125;</span><br><span class="line"><span class="keyword">for</span> k,v <span class="keyword">in</span> <span class="built_in">pairs</span>(user) <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">print</span>(k,v)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.crazyman.top/2015/05/04/Lua教程1/" data-id="cid2q09gs000znnarwpm7snln" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Apache-AutoIndex-美化" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/04/30/Apache-AutoIndex-美化/" class="article-date">
+  <time datetime="2015-04-30T03:29:11.000Z" itemprop="datePublished">2015-04-30</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/服务器/">服务器</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/04/30/Apache-AutoIndex-美化/">Apache AutoIndex 美化</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>通过Apache搭建网页服务器，但开启了某个目录的autoindex功能时，可以很方便的实现文件共享。<br>但apache默认生成的界面看起来实在太丑。我们可以配置http.conf来配置生成界面的样式， 但如果你不了apache的配置，不了解html和css， 操作起来也是很不方便。</p>
+<p>github上的一个开源项目Apaxy正好解决了这个问题。</p>
+<p><a href="https://github.com/AdamWhitcroft/Apaxy" target="_blank" rel="external">Apaxy</a></p>
+<p>Apaxy主要功能：</p>
+<ul>
+<li>使用 CSS 美化目录浏览。</li>
+<li>可以使用 JavaScript 或者 jQuery 方式弹窗。</li>
+<li>可以添加欢迎消息，下载指示和版权信息。</li>
+<li>添加自定义文件类型图标（需要修改 .htaccess 文件）。</li>
+</ul>
+<p>具体使用方法，参考github上面的项目说明。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.crazyman.top/2015/04/30/Apache-AutoIndex-美化/" data-id="cid2q09h2001jnnar5krtnit6" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-重装安装Ubutnu" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/04/29/重装安装Ubutnu/" class="article-date">
+  <time datetime="2015-04-29T07:30:00.000Z" itemprop="datePublished">2015-04-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/系统/">系统</a>►<a class="article-category-link" href="/categories/系统/Ubuntu/">Ubuntu</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/04/29/重装安装Ubutnu/">Ubuntu下重新安装Ubuntu</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="通过grub引导ubuntu镜像文件来安装系统">通过grub引导ubuntu镜像文件来安装系统</h2><p>下载了ubuntu的镜像文件，如何安装? 如果你还有光盘刻录设备，可以把ubuntu系统镜像刻录到光盘来进行安装，但现在很少人还在用有光驱的机器了吧。你也可以使用工具（windows下有ultraiso, ubuntu下有startup disk creater)把光盘镜像写入到u盘，通过u盘来安装。其实不用这么麻烦，镜像文件不是已经下载到你的硬盘了吗，我们可以直接从硬盘来安装系统。</p>
+<p><em>本安装方法，仅适用于已经有grub2引导环境的情况</em></p>
+<ul>
+<li><p>准备iso镜像文件</p>
+<p>  ubuntu最新发行版下载地址：<a href="http://releases.ubuntu.com/" target="_blank" rel="external">ubuntu</a></p>
+</li>
+<li><p>拷贝iso文件到指定目录</p>
+<p>  把iso文件拷贝到一个路径相对简洁一些的目录。因为在grub下你要用到这个目录， 太长了输起来麻烦。比如放在：/boot/下。<br>  <em>注意不要放在中文目录中，在grub下，你是无法输入中文的</em></p>
+</li>
+<li><p>引导iso</p>
+<ul>
+<li><p>如果你现在的系统是ubuntu, 可以通过修改文件/etc/grub.d/40-custom来添加启动项。<br>打开40-custom, 输入以下内容：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">menuentry <span class="string">"ISO"</span> &#123;</span><br><span class="line">    <span class="built_in">set</span> isofile=<span class="string">"/boot/iso/ubuntu-15.04-desktop-amd64.iso"</span></span><br><span class="line">    loopback loop (hd0, <span class="number">1</span>)<span class="variable">$isofile</span></span><br><span class="line">    linux (loop)/casper/vmlinuz.efi boot=casper iso-scan/filename=<span class="variable">$isofile</span></span><br><span class="line">    initrd (loop)/casper/initrd</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面isofile是光盘镜像的位置，根据自己的情况进行设置。</p>
+<p>对上面几个命令的说明：</p>
+<ul>
+<li><p>menuentry</p>
+<p>设定启动菜单的标题，也就是在grub启动选择菜单中看到的内容</p>
+</li>
+<li><p>set isofile</p>
+<p>设置变量isofile, 指向iso镜像文件的路径， 因为iso的路径比较长，设置变量方便其它地方的输入</p>
+</li>
+<li><p>loopback</p>
+<p>挂载镜像文件，这里要指明镜像文件的绝对路径。<br>(hd0, 4)表示硬盘0的4号分区， 可以通过命令df查看自己电脑上的具体情况</p>
+</li>
+<li><p>linux</p>
+<p>指定要搜索镜像的路径和要加载的内核路径</p>
+</li>
+<li><p>initrd</p>
+<p>初始化临时的根文件系统</p>
+</li>
+</ul>
+<p>然后运行sudo update-grub来重新生成启动菜单。重启电脑，进入grub的启动菜单，就可以看到ISO的启动项了。</p>
+</li>
+<li><p>如果不想添加启动项， 也可以直接在grub的命令环境下手动引导</p>
+<p>开机重启后，按住shift键直到进入grub菜单界面，再按C进入命令行模式。</p>
+<p>把上面启动菜单项的命令，在这里执行一遍。</p>
+</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.crazyman.top/2015/04/29/重装安装Ubutnu/" data-id="cid2q09fr0001nnarcu6qhcag" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Mac下添加定时任务" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/04/29/Mac下添加定时任务/" class="article-date">
+  <time datetime="2015-04-29T07:00:00.000Z" itemprop="datePublished">2015-04-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/系统/">系统</a>►<a class="article-category-link" href="/categories/系统/Mac/">Mac</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/04/29/Mac下添加定时任务/">Mac下添加定时任务</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="步骤">步骤</h2><ul>
+<li>编写任务脚本</li>
+</ul>
+<p>把想要执行的工作写入脚本文件，如添加文件run.sh, 写入以下内容：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="shebang">#!/bin/bash</span></span><br><span class="line"><span class="built_in">echo</span> `date` &gt; <span class="variable">$HOME</span>/<span class="built_in">log</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>编写任务描述文件</li>
+</ul>
+<p>mac下的任务描述文件是plist格式的。结构如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="pi">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>  </span><br><span class="line"><span class="doctype">&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="title">plist</span> <span class="attribute">version</span>=<span class="value">"1.0"</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="title">dict</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 名称，要全局唯一 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">key</span>&gt;</span>Label<span class="tag">&lt;/<span class="title">key</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">string</span>&gt;</span>com.uniflor.notifier<span class="tag">&lt;/<span class="title">string</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 要运行的程序， 如果省略这个选项，会把ProgramArguments的第一个</span><br><span class="line">    元素作为要运行的程序 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">key</span>&gt;</span>Program<span class="tag">&lt;/<span class="title">key</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">string</span>&gt;</span>/Users/uniflor/script.sh<span class="tag">&lt;/<span class="title">string</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 命令， 第一个为命令，其它为参数--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">key</span>&gt;</span>ProgramArguments<span class="tag">&lt;/<span class="title">key</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">array</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="title">string</span>&gt;</span>/Users/uniflor/script.sh<span class="tag">&lt;/<span class="title">string</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="title">array</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 运行时间 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">key</span>&gt;</span>StartCalendarInterval<span class="tag">&lt;/<span class="title">key</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">dict</span>&gt;</span></span><br><span class="line"></span><br><span class="line">      <span class="tag">&lt;<span class="title">key</span>&gt;</span>Minute<span class="tag">&lt;/<span class="title">key</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="title">integer</span>&gt;</span>30<span class="tag">&lt;/<span class="title">integer</span>&gt;</span></span><br><span class="line"></span><br><span class="line">      <span class="tag">&lt;<span class="title">key</span>&gt;</span>Hour<span class="tag">&lt;/<span class="title">key</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="title">integer</span>&gt;</span>9<span class="tag">&lt;/<span class="title">integer</span>&gt;</span></span><br><span class="line"></span><br><span class="line">      <span class="tag">&lt;<span class="title">key</span>&gt;</span>Day<span class="tag">&lt;/<span class="title">key</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="title">integer</span>&gt;</span>1<span class="tag">&lt;/<span class="title">integer</span>&gt;</span></span><br><span class="line"></span><br><span class="line">      <span class="tag">&lt;<span class="title">key</span>&gt;</span>Month<span class="tag">&lt;/<span class="title">key</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="title">integer</span>&gt;</span>5<span class="tag">&lt;/<span class="title">integer</span>&gt;</span></span><br><span class="line"></span><br><span class="line">      <span class="comment">&lt;!-- 0和7都指星期天 --&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="title">key</span>&gt;</span>Weekday<span class="tag">&lt;/<span class="title">key</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="title">integer</span>&gt;</span>0<span class="tag">&lt;/<span class="title">integer</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;/<span class="title">dict</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 运行间隔，与StartCalenderInterval使用其一，单位为秒 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">key</span>&gt;</span>StartInterval<span class="tag">&lt;/<span class="title">key</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">integer</span>&gt;</span>30<span class="tag">&lt;/<span class="title">integer</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 标准输入文件 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">key</span>&gt;</span>StandardInPath<span class="tag">&lt;/<span class="title">key</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">string</span>&gt;</span>/Users/uniflor/run-in.log<span class="tag">&lt;/<span class="title">string</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 标准输出文件 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">key</span>&gt;</span>StandardOutPath<span class="tag">&lt;/<span class="title">key</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">string</span>&gt;</span>/Users/uniflor/Bin/run-out.log<span class="tag">&lt;/<span class="title">string</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 标准错误输出文件 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">key</span>&gt;</span>StandardErrorPath<span class="tag">&lt;/<span class="title">key</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">string</span>&gt;</span>/Users/uniflor/Bin/run-err.log<span class="tag">&lt;/<span class="title">string</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;/<span class="title">dict</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="title">plist</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>两种指定要执行命令的方法：</p>
+<ul>
+<li><p>使用Program和ProgramArguments</p>
+<p><em>Program</em>, 运行命令或要执行文件路径<br><em>ProgramArguments</em>, 执行时传入参数</p>
+</li>
+<li><p>只使用ProgramArguments</p>
+<p>此时，ProgramArguments的每个参数为要执行的命令或文件路径，其它参数为传入参数</p>
+</li>
+</ul>
+<p>两种设置执行时间的方法：</p>
+<ul>
+<li><p>StartCalendarInterval</p>
+<p>使用元素Minute, Hour, Day, Month, Weekday两指定执行时间，如：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">key</span>&gt;</span>StartCalendarInterval<span class="tag">&lt;/<span class="title">key</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">dict</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">key</span>&gt;</span>Minute<span class="tag">&lt;/<span class="title">key</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">integer</span>&gt;</span>30<span class="tag">&lt;/<span class="title">integer</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">key</span>&gt;</span>Hour<span class="tag">&lt;/<span class="title">key</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">integer</span>&gt;</span>9<span class="tag">&lt;/<span class="title">integer</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">dict</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>每天的9:30执行</p>
+</li>
+<li><p>StartInterval</p>
+<p>设置执行的时间间隔，单位为秒</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">key</span>&gt;</span>StartInterval<span class="tag">&lt;/<span class="title">key</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">integer</span>&gt;</span>3600<span class="tag">&lt;/<span class="title">integer</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>每小时执行一次</p>
+</li>
+</ul>
+<ul>
+<li><p>使用launchctl加载plist</p>
+<p>任务描述文件写好后，怎么使用它呢？可以使用launchctl工具，添加任务到launchd。</p>
+<p>系统定义了几个位置来存放任务列表</p>
+<ul>
+<li>~/Library/LaunchAgents         由用户自己定义的任务项</li>
+<li>/Library/LaunchAgents         由管理员为用户定义的任务项</li>
+<li>/Library/LaunchDaemons         由管理员定义的守护进程任务项</li>
+<li>/System/Library/LaunchAgents   由Mac OS X为用户定义的任务项</li>
+<li>/System/Library/LaunchDaemons  由Mac OS X定义的守护进程任务项</li>
+</ul>
+<p><em>为用户定义的任务项，只以用户登陆后才会执行，守护进程任务项无论用户是否登陆都会执行</em><br>根据添加的任务类型，把它拷贝到相应的目录，通过launchctl来加载：</p>
+<ul>
+<li>添加 launchctl load /System/Library/LaunchAgents/com.test.plist</li>
+<li>移除 launchctl unload /System/Library/LaunchAgents/com.test.plist</li>
+<li>查看 launchctl list</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.crazyman.top/2015/04/29/Mac下添加定时任务/" data-id="cid2q09gh000mnnarz3rrrfip" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+  
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/page/2/">&laquo; 上一页</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/">下一页 &raquo;</a>
+    </nav>
+  
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><span class="category-list-count">4</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/工具/Git/">Git</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/SVN/">SVN</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/rsync/">rsync</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/服务器/">服务器</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/系统/">系统</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/系统/Mac/">Mac</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/系统/Ubuntu/">Ubuntu</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/语言/">语言</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/语言/LUA/">LUA</a><span class="category-list-count">3</span></li></ul></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/apache/">apache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git-server/">git server</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/git-server/" style="font-size: 10px;">git server</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">存档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/06/04/使用Unix日志/">使用Unix日志</a>
+          </li>
+        
+          <li>
+            <a href="/2015/06/03/unix下创建守护进程/">unix下创建守护进程</a>
+          </li>
+        
+          <li>
+            <a href="/2015/05/23/Mac下弹出气泡通知/">Mac下弹出气泡通知</a>
+          </li>
+        
+          <li>
+            <a href="/2015/05/23/Linux-Bridge/">Linux Bridge</a>
+          </li>
+        
+          <li>
+            <a href="/2015/05/21/SVN忽略文件/">SVN忽略文件</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      Copyright (C) 2015 Ozone, All Rights Reserved.<br>
+      <a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/index.html" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">存档</a>
+  
+    <a href="/about" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="/js/jquery-2.0.3.js" type="text/javascript"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>

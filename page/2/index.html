@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>CrazyMan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description">
+<meta property="og:type" content="website">
+<meta property="og:title" content="CrazyMan">
+<meta property="og:url" content="https://blog.crazyman.top/page/2/index.html">
+<meta property="og:site_name" content="CrazyMan">
+<meta property="og:description">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CrazyMan">
+<meta name="twitter:description">
+  
+    <link rel="alternative" href="atom.xml" title="CrazyMan" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+<!--   <link href="//fonts.useso.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css"> -->
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">CrazyMan</a>
+      </h1>
+      
+        <h3 id="subtitle-wrap">
+          <p id="subtitle">NOTHING IS TRUE</p>
+        </h2>
+        <h3 id="subtitle-wrap">
+          <p id="subtitle">EVERYTHING IS PERMITTED</p>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/index.html">首页</a>
+        
+          <a class="main-nav-link" href="/archives">存档</a>
+        
+          <a class="main-nav-link" href="/about">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="atom.xml" title="RSS Feed"></a>
+        
+      </nav>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-Git-Server" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/05/14/Git-Server/" class="article-date">
+  <time datetime="2015-05-14T10:17:54.000Z" itemprop="datePublished">2015-05-14</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/工具/">工具</a>►<a class="article-category-link" href="/categories/工具/Git/">Git</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/05/14/Git-Server/">Windows平台下创建Git服务器</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>如果想在Windows平台上实现一个Git服务器，可以通过apache+git组合来实现。</p>
+<p>步骤如下：</p>
+<ul>
+<li><p>下载Git for Windows</p>
+<p>  首先，在Windows平台上，要先安装Git的Windows版本</p>
+<p>  <a href="http://msysgit.github.io" target="_blank" rel="external">git for windows</a></p>
+<p>  注意： 安装时，要把git和其相关工具添加到系统环境变量</p>
+</li>
+<li><p>设置Git仓库的根目录</p>
+<p>  在系统上创建一个目录，如：D:\GITROOT, 这个目录将要做为所有git项目的存放仓库。</p>
+</li>
+<li><p>创建测试git项目</p>
+<p>  进入到Git仓库的根目录（D:\GITROOT),执行命令：</p>
+<p>  git init –bare io.git</p>
+<p>  这样就会在D:\GITROOT下创建一个名为io.git的目录，并进行初始化。选项“–bare”用来指明<br>  这个项目为一个公共项目</p>
+</li>
+<li><p>调试git-http-backend</p>
+<p>  在git的安装目录libexec/git-core下，有一个可执行文件git-http-backend.exe, 这个程序<br>  是专门处理http请求的。</p>
+<p>  要想这个程序正常工作，拷贝git安装目录下bin/libiconv-2.dll到libexec/git-core/下，然后在命令行下运行git-http-backend， 如果能正常返回”Status: 500 Internal Server Error”，说明git-http-backend.exe执行环境正常</p>
+</li>
+<li><p>配置apache的httpd.conf</p>
+<p>  为了能通过http来访问Git Server, 需要通过apache把对git的请求，转发给git-http-backend, 处理完成会再通过apache返回。</p>
+</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 设置Git仓库的根目录, 这就是之前创建的那个目录</span></span><br><span class="line">SetEnv GIT_PROJECT_ROOT D:/GITROOT</span><br><span class="line"></span><br><span class="line"><span class="comment"># 暴露所有仓库，如果不设置它的话，我们必须在每一个子仓库中放置一个名为</span></span><br><span class="line"><span class="comment"># git-daemon-export-ok的文件才行</span></span><br><span class="line">SetEnv GIT_HTTP_EXPORT_ALL</span><br><span class="line"></span><br><span class="line"><span class="comment"># 匹配请求，转发给git-http-backend.exe</span></span><br><span class="line"><span class="comment"># 我这里是把git的根仓库放在了服务器的子目录git下，http链接形式为：</span></span><br><span class="line"><span class="comment"># http://crazyman.top/git/io.git, 如果放在其它的目录下，修改正则表式</span></span><br><span class="line"><span class="comment"># git-http-backend.exe的路径要根据自己的安装位置设置，不要漏掉末尾的"$1"</span></span><br><span class="line">ScriptAliasMatch <span class="string">"(?x)^/git/(.*/(HEAD | info/refs | objects/(info/[^/]+ | [0-9a-f]&#123;2&#125;/[0-9a-f]&#123;38&#125; | pack/pack-[0-9a-f]&#123;40&#125;.(pack|idx)) | git-(upload|receive)-pack))$"</span> <span class="string">"C:/Program Files/Git/libexec/git-core/git-http-backend.exe/<span class="variable">$1</span>"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加认证</span></span><br><span class="line"><span class="comment"># 其中认证文件为纯文本，形如：</span></span><br><span class="line"><span class="comment"># root:123456</span></span><br><span class="line"><span class="comment"># admin:123456</span></span><br><span class="line"><span class="comment"># 认证文件这里存放在了GIT仓库的根目录下</span></span><br><span class="line">&lt;Location /git/&gt;</span><br><span class="line">    AuthType Basic</span><br><span class="line">    AuthName <span class="string">"Auth For Git"</span></span><br><span class="line">    AuthUserFile <span class="string">"D:/GITROOT/passwd"</span></span><br><span class="line">    Require valid-user</span><br><span class="line">&lt;/Location&gt;</span><br></pre></td></tr></table></figure>
+<p>修改完httpd.conf后，重启apache让改动生效</p>
+<ul>
+<li><p>测试git服务器</p>
+<p>  以下工作都完成后，可以其它机器上进行测试，</p>
+<p>  git clone <a href="http://crazyman.top/io.git" target="_blank" rel="external">http://crazyman.top/io.git</a></p>
+<p>  命令会要求帐号和密码，如果能正常把io.git仓库克隆到本地，说明Git Server搭建成功。</p>
+</li>
+<li><p>ALL IS DONE</p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.crazyman.top/2015/05/14/Git-Server/" data-id="cid2q09gy0017nnarfveigbwg" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/apache/">apache</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git-server/">git server</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-shntool" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/05/12/shntool/" class="article-date">
+  <time datetime="2015-05-12T14:31:17.000Z" itemprop="datePublished">2015-05-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/05/12/shntool/">shntool</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.crazyman.top/2015/05/12/shntool/" data-id="cid2q09gc000hnnar03ub9zk1" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-使用Rsync" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/05/07/使用Rsync/" class="article-date">
+  <time datetime="2015-05-07T02:55:10.000Z" itemprop="datePublished">2015-05-07</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/工具/">工具</a>►<a class="article-category-link" href="/categories/工具/rsync/">rsync</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/05/07/使用Rsync/">使用Rsync</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="rsync_命令">rsync 命令</h2><h3 id="rsync的命令格式可以为以下六种：">rsync的命令格式可以为以下六种：</h3><ul>
+<li>rsync [OPTION]… SRC [SRC]… DEST</li>
+</ul>
+<p>本地文件同步，即SRC和DES在同一台机器上。SRC可以指定多个目录或文件。如:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rsync -arv ~/www /var/www</span><br></pre></td></tr></table></figure>
+<ul>
+<li>rsync [OPTION]… SRC [SRC]… [USER@]HOST:DEST</li>
+</ul>
+<p>使用一个远程shell程序(如rsh、ssh)来实现将本地机器的内容拷贝到远程机器。<br>DEST有两种写法：相对当前用户家目录的路径和绝对路径。如:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rsync -arv <span class="built_in">test</span> ozone@crazyman.top:temp</span><br><span class="line">rsync -arv <span class="built_in">test</span> ozone@crazyman.top:/home/ozone/temp</span><br></pre></td></tr></table></figure>
+<ul>
+<li>rsync [OPTION]… SRC [SRC]… [USER@]HOST::DEST</li>
+</ul>
+<p>从本地机器拷贝文件到远程rsync服务器中。<br>DEST此时不再是路径，而是再服务器上rsync配置的模块名称。rsync的具体配置以后我会详细讲解。<br>如：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rsync -arv <span class="built_in">test</span> ozone@crazyman.top::www</span><br></pre></td></tr></table></figure>
+<ul>
+<li>rsync [OPTION]… SRC [SRC]… rsync://[USER@]HOST[:PORT]/DEST</li>
+</ul>
+<p>从本地机器拷贝文件到远程rsync服务器中。和使用”rsync [OPTION]… SRC [SRC]… [USER@]HOST::DEST”相同， 此时的DEST也是模块名称，不是路径。如：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rsync -arv <span class="built_in">test</span> rsync://ozone@crazyman.top/www</span><br></pre></td></tr></table></figure>
+<ul>
+<li>rsync [OPTION]… [USER@]HOST:SRC [DEST]</li>
+</ul>
+<p>使用一个远程shell程序(如rsh、ssh)来实现将远程机器的内容拷贝到本地机器。SRC有两种写法：相对当前用户家目录的路径和绝对路径。当DEST省略时，只显示远程文件列表，不进行实际的拷贝工作。如:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rsync -arv ozone@crazyman.top:temp <span class="built_in">test</span> </span><br><span class="line">rsync -arv ozone@crazyman.top:/home/ozone/temp <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>rsync [OPTION]… [USER@]HOST::SRC [DEST]</li>
+</ul>
+<p>从远程rsync服务器中拷贝文件到本地机。SRC此时不再是路径，而是再服务器上rsync配置的模块名称。如：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rsync -arv ozone@crazyman.top::www <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>rsync [OPTION]… rsync://[USER@]HOST[:PORT]/SRC [DEST]</li>
+</ul>
+<p>从远程rsync服务器中拷贝文件到本地机。和使用”rsync [OPTION]… [USER@]HOST::SRC [DEST]”相同， 此时的DEST也是模块名称，不是路径。如：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rsync -arv rsync://ozone@crazyman.top/www <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+<p>几个需要注意的地方：</p>
+<ul>
+<li>从本地拷贝文件到远程计算机时，SRC可以指定多个</li>
+<li>当DEST为本地路径时，DEST参数可以省略，省略时只会显示文件列表，不执行实际的同步工作，这在确认远程路径内容时非常有用</li>
+<li>使用”:”时，实际是通过remote shell连接，远程服务器不需要启动rsync服务。 使用”::”或”rsync:”时，连接到的是rysnc daemon, 所以这时要指定模块的名称</li>
+</ul>
+<h3 id="rsync_命令参数">rsync 命令参数</h3><p>rsync参数很多，常用的参数如下：</p>
+<ul>
+<li>-v, –verbose                 详细模式输出</li>
+<li>-q, –quiet                   精简输出模式</li>
+<li>-q, –no-motd                 不显示欢迎信息</li>
+<li>-a, –archive                 归档模式，表示以递归方式传输文件，并保持所有文件属性，等于-rlptgoD</li>
+<li>-a, –no-OPTION               关闭-a中打开的某个选项(e.g. –no-D)</li>
+<li>-r, –recursive               对子目录以递归模式处理</li>
+<li>-d, –dirs                    只拷贝文件夹</li>
+<li>-R, –relative                使用相对路径信息</li>
+<li><p>更新</p>
+<ul>
+<li>-u, –update  跳过所有已经存在于DST，并且文件时间晚于要备份的文件</li>
+<li>-u, –inplace</li>
+<li>-u, –append</li>
+<li>-u, –append-verify</li>
+</ul>
+</li>
+<li><p>文件备份</p>
+<ul>
+<li>-b, –backup                  创建备份，也就是对于目的已经存在有同样的文件名时，将老的文件重新命名为~filename。可以使用–suffix选项来指定不同的备份文件前缀。</li>
+<li>–backup-dir=DIR              将备份文件(如~filename)存放在在目录下。</li>
+<li>–suffix=SUFFIX               定义备份文件前缀</li>
+</ul>
+</li>
+<li><p>链接处理</p>
+<ul>
+<li>-l, –links                   保留软链结</li>
+<li>-L, –copy-links              想对待常规文件一样处理软链结</li>
+<li>–copy-unsafe-links           仅仅拷贝指向SRC路径目录树以外的链结</li>
+<li>–safe-links                  忽略指向SRC路径目录树以外的链结</li>
+<li>-H, –hard-links              保留硬链结</li>
+<li>-k, –copy-dirlinks           把文件夹链接拷贝成一个链接文件</li>
+<li>-K, –keep-dirlinks           把文件夹链接拷贝成一个文件夹</li>
+</ul>
+</li>
+<li><p>文件属性</p>
+<ul>
+<li>-A, –acls                    保持ACLs</li>
+<li>-X, –xattrs                  保持扩展属性</li>
+<li>-p, –perms                   保持文件权限</li>
+<li>-o, –owner                   保持文件属主信息</li>
+<li>-g, –group                   保持文件属组信息</li>
+<li>-D, –devices                 保持设备文件信息</li>
+<li>-t, –times                   保持文件时间信息</li>
+</ul>
+</li>
+<li><p>-S, –sparse                      对稀疏文件进行特殊处理以节省DST的空间</p>
+</li>
+<li>-n, –dry-run                     现实哪些文件将被传输</li>
+<li>-W, –whole-file                  拷贝文件，不进行增量检测</li>
+<li>-x, –one-file-system             不要跨越文件系统边界</li>
+<li>-c, –checksum                    打开校验开关，强制对文件传输进行校验</li>
+<li><p>-B, –block-size=SIZE             检验算法使用的块尺寸，默认是700字节</p>
+</li>
+<li><p>文件排除</p>
+<ul>
+<li>-C, –cvs-exclude                 使用和CVS一样的方法自动忽略文件</li>
+<li>–exclude=PATTERN                 指定排除不需要传输的文件模式</li>
+<li>–include=PATTERN                 指定不排除而需要传输的文件模式</li>
+<li>–exclude-from=FILE               排除FILE中指定模式的文件</li>
+<li>–include-from=FILE               不排除FILE指定模式匹配的文件</li>
+</ul>
+</li>
+<li><p>–config=FILE                         指定其他的配置文件，不使用默认的rsyncd.conf文件</p>
+</li>
+<li>–password-file=FILE                  从FILE中得到密码</li>
+<li>-z, –compress                        对备份的文件在传输时进行压缩处理</li>
+<li><ul>
+<li>–progress                            在传输时现实传输过程</li>
+</ul>
+</li>
+<li>–existing                            仅仅更新那些已经存在于DST的文件，而不备份那些新创建的文件</li>
+<li>–delete                              删除那些DST中有SRC没有的文件<br>–delete-excluded                       同样删除接收端那些被该选项指定排除的文件<br>–delete-after                          传输结束以后再删除<br>–ignore-errors                         及时出现IO错误也进行删除<br>–partial                               保留那些因故没有完全传输的文件，以是加快随后的再次传输<br>–force                                 强制删除目录，即使不为空</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.crazyman.top/2015/05/07/使用Rsync/" data-id="cid2q09g5000annarff5yk9u7" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-BootingInInsecureMode" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/05/06/BootingInInsecureMode/" class="article-date">
+  <time datetime="2015-05-06T13:03:52.000Z" itemprop="datePublished">2015-05-06</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/系统/">系统</a>►<a class="article-category-link" href="/categories/系统/Ubuntu/">Ubuntu</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/05/06/BootingInInsecureMode/">booting in insecure mode</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最新安装了Ubuntu 15.04, 发现启动时屏幕显示”Booting in insecure mode”, 网上一番搜索，发现这是Ubuntu 14.10引入的一个Bug, 在15.04还没有修复。这行文字会显示3秒，然后自动消失，对系统的使用没有什么影响。但如果你看着不爽，要把它去掉，可以缷载掉shim。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get purge shim shim-signed</span><br><span class="line">sudo grub-install</span><br></pre></td></tr></table></figure>
+<p>重启电脑，整个世界都清净了。（强迫症就是这样养成的）</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.crazyman.top/2015/05/06/BootingInInsecureMode/" data-id="cid2q09h1001gnnarc09stobf" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-编译ffmpeg" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/05/06/编译ffmpeg/" class="article-date">
+  <time datetime="2015-05-06T06:23:42.000Z" itemprop="datePublished">2015-05-06</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/05/06/编译ffmpeg/">编译可供Android使用的FFmpeg库</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>FFmpeg是一套强大的音、视频处理工具。常用来对音频、视频进行合并或分离、拼接、剪裁，音频视频的转码等，还有非常强大的视频采集、视频抓图、给视频加水印等功能。主要组件：</p>
+<ul>
+<li>libavformat：用于各种音视频封装格式的生成和解析，包括获取解码所需信息以生成解码上下文结构<br>和读取音视频帧等功能；</li>
+<li>libavcodec：用于各种类型声音/图像编解码；</li>
+<li>libavutil：包含一些公共的工具函数；</li>
+<li>libswscale：用于视频场景比例缩放、色彩映射转换；</li>
+<li>libpostproc：用于后期效果处理；</li>
+<li>ffmpeg：该项目提供的一个工具，可用于格式转换、解码或电视卡即时编码等；</li>
+<li>ffsever：一个 HTTP 多媒体即时广播串流服务器；</li>
+<li>ffplay：是一个简单的播放器，使用ffmpeg 库解析和解码，通过SDL显示；</li>
+</ul>
+<h2 id="编译FFmpeg">编译FFmpeg</h2><ul>
+<li>下载<a href="http://ffmpeg.org/download.html" target="_blank" rel="external">ffmpeg</a></li>
+</ul>
+<p>本测试使用的版本为2.6.1， 使用其它版本时请灵活变通</p>
+<ul>
+<li>编译成互相独立的动态库</li>
+</ul>
+<p>ffmpeg的每一个组件单独编译成.so库，通过android的jni技术，使用c调用这些.so库中的方法，<br>实现我们想要的功能。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="shebang">#!/bin/bash</span><br><span class="line"></span></span><br><span class="line"><span class="comment"># NDK的路径，根据自己的安装位置进行设置</span></span><br><span class="line">NDK=/Users/uniflor/Apps/android-ndk</span><br><span class="line"></span><br><span class="line"><span class="comment"># 编译针对的平台，可以根据自己的需求进行设置</span></span><br><span class="line"><span class="comment"># 这里选择最低支持android-14, arm架构，生成的so库是放在</span></span><br><span class="line"><span class="comment"># libs/armeabi文件夹下的，若针对x86架构，要选择arch-x86</span></span><br><span class="line">PLATFORM=<span class="variable">$NDK</span>/platforms/android-<span class="number">14</span>/arch-arm</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 工具链的路径，根据编译的平台不同而不同</span></span><br><span class="line"><span class="comment"># arm-linux-androideabi-4.9与上面设置的PLATFORM对应，4.9为工具的版本号，</span></span><br><span class="line"><span class="comment"># 根据自己安装的NDK版本来确定，一般使用最新的版本</span></span><br><span class="line">TOOLCHAIN=<span class="variable">$NDK</span>/toolchains/arm-linux-androideabi-<span class="number">4.9</span>/prebuilt/darwin-x86_64</span><br><span class="line"></span><br><span class="line">ARCH=arm</span><br><span class="line">TARGETOS=android</span><br><span class="line">PREFIX=$(<span class="built_in">pwd</span>)/<span class="variable">$TARGETOS</span>/<span class="variable">$ARCH</span></span><br><span class="line">ADDITIONAL_CONFIGURE_FLAG=</span><br><span class="line"></span><br><span class="line">./configure \</span><br><span class="line">    --prefix=<span class="variable">$PREFIX</span> \</span><br><span class="line">    --enable-shared \</span><br><span class="line">    --disable-static \</span><br><span class="line">    --disable-doc \</span><br><span class="line">    --disable-programs \</span><br><span class="line">    --enable-small \</span><br><span class="line">    --disable-avdevice \</span><br><span class="line">    --disable-devices \</span><br><span class="line">    --disable-protocols \</span><br><span class="line">    --enable-protocol=file \</span><br><span class="line">    --enable-cross-compile \</span><br><span class="line">    --cross-prefix=<span class="variable">$TOOLCHAIN</span>/bin/arm-linux-androideabi- \</span><br><span class="line">    --sysroot=<span class="variable">$PLATFORM</span> \</span><br><span class="line">    --extra-cflags=<span class="string">"-Os -fpic"</span> \</span><br><span class="line">    --extra-ldflags=<span class="string">"<span class="variable">$ADDI_LDFLAGS</span>"</span> \</span><br><span class="line">    --arch=<span class="string">"<span class="variable">$ARCH</span>"</span> \</span><br><span class="line">    --target-os=<span class="string">"<span class="variable">$TARGETOS</span>"</span></span><br><span class="line"></span><br><span class="line">make clean</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+<p>等待几分钟，命令运行结束后会在ffmpeg目录下生成一个anroid/arm的目录，<br>目录中会有提取的头文件和动态库。<br>生成以下动态库如下：</p>
+<ul>
+<li>libavcodec.so</li>
+<li>libavdevice.so</li>
+<li>libavfilter.so</li>
+<li>libavformat.so</li>
+<li>libavutil.so</li>
+<li>libswresample.so</li>
+<li>libswscale.so</li>
+</ul>
+<p>每个库的作用，请自行百度或google, 生的动态库要进行精简或扩展功能的请参考ffmpeg官方文档来<br>调整上面的configure的参数。</p>
+<ul>
+<li>编译libffmpeg.so</li>
+</ul>
+<p>如果感觉生成的库太多，调用时一一加载麻烦，可以把这些库合并成一个库。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="shebang">#!/bin/bash</span><br><span class="line"></span></span><br><span class="line"><span class="comment"># NDK的路径，根据自己的安装位置进行设置</span></span><br><span class="line">NDK=/Users/uniflor/Apps/android-ndk</span><br><span class="line"></span><br><span class="line"><span class="comment"># 编译针对的平台，可以根据自己的需求进行设置</span></span><br><span class="line"><span class="comment"># 这里选择最低支持android-14, arm架构，生成的so库是放在</span></span><br><span class="line"><span class="comment"># libs/armeabi文件夹下的，若针对x86架构，要选择arch-x86</span></span><br><span class="line">PLATFORM=<span class="variable">$NDK</span>/platforms/android-<span class="number">14</span>/arch-arm</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 工具链的路径，根据编译的平台不同而不同</span></span><br><span class="line"><span class="comment"># arm-linux-androideabi-4.9与上面设置的PLATFORM对应，4.9为工具的版本号，</span></span><br><span class="line"><span class="comment"># 根据自己安装的NDK版本来确定，一般使用最新的版本</span></span><br><span class="line">TOOLCHAIN=<span class="variable">$NDK</span>/toolchains/arm-linux-androideabi-<span class="number">4.9</span>/prebuilt/darwin-x86_64</span><br><span class="line"></span><br><span class="line">ARCH=arm</span><br><span class="line">TARGETOS=android</span><br><span class="line">PREFIX=$(<span class="built_in">pwd</span>)/<span class="variable">$TARGETOS</span>/<span class="variable">$ARCH</span></span><br><span class="line">ADDITIONAL_CONFIGURE_FLAG=</span><br><span class="line"></span><br><span class="line">./configure \</span><br><span class="line">    --prefix=<span class="variable">$PREFIX</span> \</span><br><span class="line">    --enable-shared \</span><br><span class="line">    --disable-static \</span><br><span class="line">    --disable-doc \</span><br><span class="line">    --disable-programs \</span><br><span class="line">    --enable-small \</span><br><span class="line">    --disable-avdevice \</span><br><span class="line">    --disable-devices \</span><br><span class="line">    --disable-protocols \</span><br><span class="line">    --enable-protocol=file \</span><br><span class="line">    --enable-cross-compile \</span><br><span class="line">    --cross-prefix=<span class="variable">$TOOLCHAIN</span>/bin/arm-linux-androideabi- \</span><br><span class="line">    --sysroot=<span class="variable">$PLATFORM</span> \</span><br><span class="line">    --extra-cflags=<span class="string">"-Os -fpic"</span> \</span><br><span class="line">    --extra-ldflags=<span class="string">"<span class="variable">$ADDI_LDFLAGS</span>"</span> \</span><br><span class="line">    --arch=<span class="string">"<span class="variable">$ARCH</span>"</span> \</span><br><span class="line">    --target-os=<span class="string">"<span class="variable">$TARGETOS</span>"</span></span><br><span class="line"></span><br><span class="line">make clean</span><br><span class="line">make</span><br><span class="line">make install</span><br><span class="line"></span><br><span class="line"><span class="comment"># 合并生成的静态库</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$TOOLCHAIN</span>/bin/arm-linux-androideabi-ld \</span><br><span class="line">    -rpath-link=<span class="variable">$PLATFORM</span>/usr/lib \</span><br><span class="line">    -L<span class="variable">$PLATFORM</span>/usr/lib \</span><br><span class="line">    -soname libffmpeg.so \</span><br><span class="line">    -shared -nostdlib  \</span><br><span class="line">    -Bsymbolic \</span><br><span class="line">    --whole-archive --no-undefined \</span><br><span class="line">    -o <span class="variable">$PREFIX</span>/libffmpeg.so \</span><br><span class="line">    libavcodec/libavcodec.a \</span><br><span class="line">    libavfilter/libavfilter.a \</span><br><span class="line">    libswresample/libswresample.a \</span><br><span class="line">    libavformat/libavformat.a \</span><br><span class="line">    libavutil/libavutil.a \</span><br><span class="line">    libswscale/libswscale.a \</span><br><span class="line">    -lc -lm -lz -ldl -llog \</span><br><span class="line">    <span class="variable">$TOOLCHAIN</span>/lib/gcc/arm-linux-androideabi/<span class="number">4.9</span>/libgcc.a</span><br></pre></td></tr></table></figure>
+<p>等待几分钟，命令运行结束后会在ffmpeg目录下生成一个anroid/arm的目录, 目录中会有提取的头文件和生成的libffmpeg.so库。</p>
+<h2 id="以命令行的形式来使用ffmpeg">以命令行的形式来使用ffmpeg</h2><p>在编译ffmpeg时，使用了参数 –disable-ffmpeg， 是不会生成ffmpeg工具的，不过生成了，<br>在android应用下也无法直接使用。但我们可以使用jni技术，间接调用ffmpeg的命令行方式。</p>
+<ul>
+<li><p>为android项目创建jni文件夹</p>
+<p>  创建jni文件夹，添加文件Android.mk和Application.mk</p>
+</li>
+<li><p>添加Application.mk文件</p>
+<p>  内容如下：</p>
+</li>
+</ul>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="constant">APP_ABI</span> := armeabi</span><br><span class="line"><span class="constant">APP_ABI</span> += armeabi-v7a</span><br><span class="line"><span class="constant">APP_PLATFORM</span> := android-14</span><br></pre></td></tr></table></figure>
+<ul>
+<li>复制ffmpeg文件</li>
+</ul>
+<p>复制上面android文件夹下的头文件文件夹include和ffmpeg.h, ffmpeg.c, ffmpeg_opt.c, ffmpeg_filter.c，<br>cmdutils.c, cmdutils.h, cmdutils_common_opts.h, config.h, libffmpeg.so到jni目录下</p>
+<ul>
+<li>修改ffmpeg.c和ffmpeg.h</li>
+</ul>
+<p>找到ffmpeg.c，把int man(int argc, char <strong>argv)改名为<br>int run(int argc, char </strong>argv)</p>
+<p>找到ffmpeg.h, 在文件末尾添加函数申明: int run(int argc, char **argv);</p>
+<ul>
+<li>修改cmdutils.c</li>
+</ul>
+<p>找到cmdutils.c中的exit_program函数，注释到 exit(ret), 添加 return ret；<br>并修改函数的返回类型为int, 找到cmdutils.h中exit_program的申明，也把返回类型修改为int。</p>
+<ul>
+<li>生成接口文件com.example.ffmpeg.FFmpegKit.java</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.ffmpeg;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FFmpegKit</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> ArrayList&lt;String&gt; commands;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">FFmpegKit</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.commands = <span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line">        <span class="keyword">this</span>.commands.add(<span class="string">"ffmpeg"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">run</span><span class="params">(String[] commands)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>生成头文件com_example_ffmpeg_FFmpegKit.h</li>
+</ul>
+<p>使用javah生成</p>
+<ul>
+<li>添加com_example_ffmpeg_FFmpegKit.c</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">"com_example_ffmpeg_FFmpegKit.h"</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">"ffmpeg.h"</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span><br><span class="line"> * Class:     com_example_ffmpeg_FFmpegKit</span><br><span class="line"> * Method:    run</span><br><span class="line"> * Signature: (Ljava/lang/String;)I</span><br><span class="line"> */</span></span><br><span class="line"><span class="function">JNIEXPORT jint JNICALL <span class="title">Java_com_example_ffmpeg_FFmpegKit_run</span><span class="params">(JNIEnv *env,</span><br><span class="line">        jclass obj, jobjectArray commands)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> argc = (*env)-&gt;GetArrayLength(env, commands);</span><br><span class="line">    <span class="keyword">char</span> *argv[argc];</span><br><span class="line"></span><br><span class="line">    __android_log_print(ANDROID_LOG_ERROR,<span class="string">"Kit"</span>,<span class="string">"argc %d\n"</span>, argc);</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; argc; i++) &#123;</span><br><span class="line">        jstring js = (jstring) (*env)-&gt;GetObjectArrayElement(env, commands, i);</span><br><span class="line">        argv[i] = (<span class="keyword">char</span>*) (*env)-&gt;GetStringUTFChars(env, js, <span class="number">0</span>);</span><br><span class="line">        __android_log_print(ANDROID_LOG_ERROR,<span class="string">"Kit"</span>,<span class="string">"argv %s\n"</span>, argv[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> run(argc, argv);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Android.mk文件内空为</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="constant">LOCAL_PATH</span> := <span class="variable">$(call my-dir)</span></span><br><span class="line"></span><br><span class="line">include $(CLEAR_VARS)</span><br><span class="line"></span><br><span class="line"><span class="constant">LOCAL_MODULE</span> := ffmpeg</span><br><span class="line"><span class="constant">LOCAL_SRC_FILES</span> := libffmpeg.so</span><br><span class="line">include $(PREBUILT_SHARED_LIBRARY)</span><br><span class="line"></span><br><span class="line">include $(CLEAR_VARS)</span><br><span class="line"><span class="constant">LOCAL_MODULE</span> := ffmpeginvoke</span><br><span class="line"><span class="constant">LOCAL_SRC_FILES</span> := com_example_ffmpeg_FFmpegKit.c ffmpeg.c ffmpeg_opt.c cmdutils.c ffmpeg_filter.c</span><br><span class="line"><span class="constant">LOCAL_C_INCLUDES</span> := <span class="variable">$(LOCAL_PATH)</span></span><br><span class="line"><span class="constant">LOCAL_LDLIBS</span> := -llog -lz -ldl</span><br><span class="line"><span class="constant">LOCAL_SHARED_LIBRARIES</span> := ffmpeg</span><br><span class="line"></span><br><span class="line">include $(BUILD_SHARED_LIBRARY)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>编译接口</li>
+</ul>
+<ul>
+<li>测试接口</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.loadLibrary(<span class="string">"ffmpeg"</span>);</span><br><span class="line">        System.loadLibrary(<span class="string">"ffmpeginvoke"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        </span><br><span class="line">        String base = Environment.getExternalStorageDirectory().getPath();</span><br><span class="line">        Log.e(<span class="string">"PATH"</span>, base);</span><br><span class="line">        String[] commands = <span class="keyword">new</span> String[<span class="number">9</span>];</span><br><span class="line">        commands[<span class="number">0</span>] = <span class="string">"ffmpeg"</span>;</span><br><span class="line">        commands[<span class="number">1</span>] = <span class="string">"-i"</span>;</span><br><span class="line">        commands[<span class="number">2</span>] = base + <span class="string">"/input.mp4"</span>;</span><br><span class="line">        commands[<span class="number">3</span>] = <span class="string">"-i"</span>;</span><br><span class="line">        commands[<span class="number">4</span>] = base + <span class="string">"/input.mp3"</span>;</span><br><span class="line">        commands[<span class="number">5</span>] = <span class="string">"-strict"</span>;</span><br><span class="line">        commands[<span class="number">6</span>] = <span class="string">"-2"</span>;</span><br><span class="line">        commands[<span class="number">7</span>] = <span class="string">"-y"</span>;</span><br><span class="line">        commands[<span class="number">8</span>] = base + <span class="string">"/merge.mp4"</span>;</span><br><span class="line">        <span class="keyword">int</span> result = FFmpegKit.run(commands);</span><br><span class="line">        Log.e(<span class="string">"RESULT"</span>, result + <span class="string">"**********************"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.crazyman.top/2015/05/06/编译ffmpeg/" data-id="cid2q09g00006nnaroureuv28" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-AndroidStudio代理设置" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/05/06/AndroidStudio代理设置/" class="article-date">
+  <time datetime="2015-05-06T01:57:42.000Z" itemprop="datePublished">2015-05-06</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/05/06/AndroidStudio代理设置/">AndroidStudio代理设置</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Android Studio 第一次启动时会检测Android SDK的信息，无奈有GFW的阻挡，即使翻墙，下载速度也让人抓狂，还好国内有几个不错的镜像网站。</p>
+<h2 id="禁用第一次启动时检测SDK信息">禁用第一次启动时检测SDK信息</h2><p>打开Android Studio之前，找到Android Studio的配置文件idea.properties, 在android-studio/bin目录下，在这个文件的最后一行<em>添加</em>一行：</p>
+<blockquote>
+<p>disable.android.first.run=true</p>
+</blockquote>
+<p>然后打开Android Studio, 进入Configure-&gt;SDK Manager, 设置代理。设置完成后关闭Android Studio。</p>
+<p>如果想修改Android Studio的代理，进入Configure-&gt;Settings-&gt;HTTP Proxy settings。</p>
+<p>再<em>删掉</em>刚才添加的那一行，保存后再重新打开Android Studio。</p>
+<h2 id="修改Android_Studio代理">修改Android Studio代理</h2><p>如果Android Studio已经运行过，即使是第一次运行失败，会生成Android Studio的配置文件夹，UNIX系统下路径为：~/.AndroidStudio/, 找到config/options/other.xml, 对下面几行进行设置。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="pi">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">application</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">component</span> <span class="attribute">name</span>=<span class="value">"HttpConfigurable"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">option</span> <span class="attribute">name</span>=<span class="value">"USE_HTTP_PROXY"</span> <span class="attribute">value</span>=<span class="value">"true"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">option</span> <span class="attribute">name</span>=<span class="value">"PROXY_HOST"</span> <span class="attribute">value</span>=<span class="value">"127.0.0.1"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">option</span> <span class="attribute">name</span>=<span class="value">"PROXY_PORT"</span> <span class="attribute">value</span>=<span class="value">"3128"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="title">component</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">application</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.crazyman.top/2015/05/06/AndroidStudio代理设置/" data-id="cid2q09h5001mnnarz9clbifw" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+  
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">下一页 &raquo;</a>
+    </nav>
+  
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><span class="category-list-count">4</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/工具/Git/">Git</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/SVN/">SVN</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/rsync/">rsync</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/服务器/">服务器</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/系统/">系统</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/系统/Mac/">Mac</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/系统/Ubuntu/">Ubuntu</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/语言/">语言</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/语言/LUA/">LUA</a><span class="category-list-count">3</span></li></ul></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/apache/">apache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git-server/">git server</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/git-server/" style="font-size: 10px;">git server</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">存档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/06/04/使用Unix日志/">使用Unix日志</a>
+          </li>
+        
+          <li>
+            <a href="/2015/06/03/unix下创建守护进程/">unix下创建守护进程</a>
+          </li>
+        
+          <li>
+            <a href="/2015/05/23/Mac下弹出气泡通知/">Mac下弹出气泡通知</a>
+          </li>
+        
+          <li>
+            <a href="/2015/05/23/Linux-Bridge/">Linux Bridge</a>
+          </li>
+        
+          <li>
+            <a href="/2015/05/21/SVN忽略文件/">SVN忽略文件</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      Copyright (C) 2015 Ozone, All Rights Reserved.<br>
+      <a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/index.html" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">存档</a>
+  
+    <a href="/about" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="/js/jquery-2.0.3.js" type="text/javascript"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>

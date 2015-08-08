@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Windows平台下创建Git服务器 | CrazyMan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="如果想在Windows平台上实现一个Git服务器，可以通过apache+git组合来实现。
+步骤如下：
+
+下载Git for Windows
+  首先，在Windows平台上，要先安装Git的Windows版本
+  git for windows
+  注意： 安装时，要把git和其相关工具添加到系统环境变量
+
+设置Git仓库的根目录
+  在系统上创建一个目录，如：D:\GITROOT, 这个目录将">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windows平台下创建Git服务器">
+<meta property="og:url" content="https://blog.crazyman.top/2015/05/14/Git-Server/index.html">
+<meta property="og:site_name" content="CrazyMan">
+<meta property="og:description" content="如果想在Windows平台上实现一个Git服务器，可以通过apache+git组合来实现。
+步骤如下：
+
+下载Git for Windows
+  首先，在Windows平台上，要先安装Git的Windows版本
+  git for windows
+  注意： 安装时，要把git和其相关工具添加到系统环境变量
+
+设置Git仓库的根目录
+  在系统上创建一个目录，如：D:\GITROOT, 这个目录将">
+<meta property="og:updated_time" content="2015-05-14T10:17:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Windows平台下创建Git服务器">
+<meta name="twitter:description" content="如果想在Windows平台上实现一个Git服务器，可以通过apache+git组合来实现。
+步骤如下：
+
+下载Git for Windows
+  首先，在Windows平台上，要先安装Git的Windows版本
+  git for windows
+  注意： 安装时，要把git和其相关工具添加到系统环境变量
+
+设置Git仓库的根目录
+  在系统上创建一个目录，如：D:\GITROOT, 这个目录将">
+  
+    <link rel="alternative" href="atom.xml" title="CrazyMan" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+<!--   <link href="//fonts.useso.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css"> -->
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">CrazyMan</a>
+      </h1>
+      
+        <h3 id="subtitle-wrap">
+          <p id="subtitle">NOTHING IS TRUE</p>
+        </h2>
+        <h3 id="subtitle-wrap">
+          <p id="subtitle">EVERYTHING IS PERMITTED</p>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/index.html">首页</a>
+        
+          <a class="main-nav-link" href="/archives">存档</a>
+        
+          <a class="main-nav-link" href="/about">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="atom.xml" title="RSS Feed"></a>
+        
+      </nav>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Git-Server" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/05/14/Git-Server/" class="article-date">
+  <time datetime="2015-05-14T10:17:54.000Z" itemprop="datePublished">2015-05-14</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/工具/">工具</a>►<a class="article-category-link" href="/categories/工具/Git/">Git</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Windows平台下创建Git服务器
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>如果想在Windows平台上实现一个Git服务器，可以通过apache+git组合来实现。</p>
+<p>步骤如下：</p>
+<ul>
+<li><p>下载Git for Windows</p>
+<p>  首先，在Windows平台上，要先安装Git的Windows版本</p>
+<p>  <a href="http://msysgit.github.io" target="_blank" rel="external">git for windows</a></p>
+<p>  注意： 安装时，要把git和其相关工具添加到系统环境变量</p>
+</li>
+<li><p>设置Git仓库的根目录</p>
+<p>  在系统上创建一个目录，如：D:\GITROOT, 这个目录将要做为所有git项目的存放仓库。</p>
+</li>
+<li><p>创建测试git项目</p>
+<p>  进入到Git仓库的根目录（D:\GITROOT),执行命令：</p>
+<p>  git init –bare io.git</p>
+<p>  这样就会在D:\GITROOT下创建一个名为io.git的目录，并进行初始化。选项“–bare”用来指明<br>  这个项目为一个公共项目</p>
+</li>
+<li><p>调试git-http-backend</p>
+<p>  在git的安装目录libexec/git-core下，有一个可执行文件git-http-backend.exe, 这个程序<br>  是专门处理http请求的。</p>
+<p>  要想这个程序正常工作，拷贝git安装目录下bin/libiconv-2.dll到libexec/git-core/下，然后在命令行下运行git-http-backend， 如果能正常返回”Status: 500 Internal Server Error”，说明git-http-backend.exe执行环境正常</p>
+</li>
+<li><p>配置apache的httpd.conf</p>
+<p>  为了能通过http来访问Git Server, 需要通过apache把对git的请求，转发给git-http-backend, 处理完成会再通过apache返回。</p>
+</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 设置Git仓库的根目录, 这就是之前创建的那个目录</span></span><br><span class="line">SetEnv GIT_PROJECT_ROOT D:/GITROOT</span><br><span class="line"></span><br><span class="line"><span class="comment"># 暴露所有仓库，如果不设置它的话，我们必须在每一个子仓库中放置一个名为</span></span><br><span class="line"><span class="comment"># git-daemon-export-ok的文件才行</span></span><br><span class="line">SetEnv GIT_HTTP_EXPORT_ALL</span><br><span class="line"></span><br><span class="line"><span class="comment"># 匹配请求，转发给git-http-backend.exe</span></span><br><span class="line"><span class="comment"># 我这里是把git的根仓库放在了服务器的子目录git下，http链接形式为：</span></span><br><span class="line"><span class="comment"># http://crazyman.top/git/io.git, 如果放在其它的目录下，修改正则表式</span></span><br><span class="line"><span class="comment"># git-http-backend.exe的路径要根据自己的安装位置设置，不要漏掉末尾的"$1"</span></span><br><span class="line">ScriptAliasMatch <span class="string">"(?x)^/git/(.*/(HEAD | info/refs | objects/(info/[^/]+ | [0-9a-f]&#123;2&#125;/[0-9a-f]&#123;38&#125; | pack/pack-[0-9a-f]&#123;40&#125;.(pack|idx)) | git-(upload|receive)-pack))$"</span> <span class="string">"C:/Program Files/Git/libexec/git-core/git-http-backend.exe/<span class="variable">$1</span>"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加认证</span></span><br><span class="line"><span class="comment"># 其中认证文件为纯文本，形如：</span></span><br><span class="line"><span class="comment"># root:123456</span></span><br><span class="line"><span class="comment"># admin:123456</span></span><br><span class="line"><span class="comment"># 认证文件这里存放在了GIT仓库的根目录下</span></span><br><span class="line">&lt;Location /git/&gt;</span><br><span class="line">    AuthType Basic</span><br><span class="line">    AuthName <span class="string">"Auth For Git"</span></span><br><span class="line">    AuthUserFile <span class="string">"D:/GITROOT/passwd"</span></span><br><span class="line">    Require valid-user</span><br><span class="line">&lt;/Location&gt;</span><br></pre></td></tr></table></figure>
+<p>修改完httpd.conf后，重启apache让改动生效</p>
+<ul>
+<li><p>测试git服务器</p>
+<p>  以下工作都完成后，可以其它机器上进行测试，</p>
+<p>  git clone <a href="http://crazyman.top/io.git" target="_blank" rel="external">http://crazyman.top/io.git</a></p>
+<p>  命令会要求帐号和密码，如果能正常把io.git仓库克隆到本地，说明Git Server搭建成功。</p>
+</li>
+<li><p>ALL IS DONE</p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.crazyman.top/2015/05/14/Git-Server/" data-id="cid2q09gy0017nnarfveigbwg" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/apache/">apache</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git-server/">git server</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/05/20/云计算/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          云计算
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/05/12/shntool/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">shntool</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><span class="category-list-count">4</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/工具/Git/">Git</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/SVN/">SVN</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/rsync/">rsync</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/服务器/">服务器</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/系统/">系统</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/系统/Mac/">Mac</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/系统/Ubuntu/">Ubuntu</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/语言/">语言</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/语言/LUA/">LUA</a><span class="category-list-count">3</span></li></ul></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/apache/">apache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git-server/">git server</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/git-server/" style="font-size: 10px;">git server</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">存档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/06/04/使用Unix日志/">使用Unix日志</a>
+          </li>
+        
+          <li>
+            <a href="/2015/06/03/unix下创建守护进程/">unix下创建守护进程</a>
+          </li>
+        
+          <li>
+            <a href="/2015/05/23/Mac下弹出气泡通知/">Mac下弹出气泡通知</a>
+          </li>
+        
+          <li>
+            <a href="/2015/05/23/Linux-Bridge/">Linux Bridge</a>
+          </li>
+        
+          <li>
+            <a href="/2015/05/21/SVN忽略文件/">SVN忽略文件</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      Copyright (C) 2015 Ozone, All Rights Reserved.<br>
+      <a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/index.html" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">存档</a>
+  
+    <a href="/about" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="/js/jquery-2.0.3.js" type="text/javascript"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>

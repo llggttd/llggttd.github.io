@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>编译可供Android使用的FFmpeg库 | CrazyMan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="FFmpeg是一套强大的音、视频处理工具。常用来对音频、视频进行合并或分离、拼接、剪裁，音频视频的转码等，还有非常强大的视频采集、视频抓图、给视频加水印等功能。主要组件：
+
+libavformat：用于各种音视频封装格式的生成和解析，包括获取解码所需信息以生成解码上下文结构和读取音视频帧等功能；
+libavcodec：用于各种类型声音/图像编解码；
+libavutil：包含一些公共的工具函数；
+l">
+<meta property="og:type" content="article">
+<meta property="og:title" content="编译可供Android使用的FFmpeg库">
+<meta property="og:url" content="https://blog.crazyman.top/2015/05/06/编译ffmpeg/index.html">
+<meta property="og:site_name" content="CrazyMan">
+<meta property="og:description" content="FFmpeg是一套强大的音、视频处理工具。常用来对音频、视频进行合并或分离、拼接、剪裁，音频视频的转码等，还有非常强大的视频采集、视频抓图、给视频加水印等功能。主要组件：
+
+libavformat：用于各种音视频封装格式的生成和解析，包括获取解码所需信息以生成解码上下文结构和读取音视频帧等功能；
+libavcodec：用于各种类型声音/图像编解码；
+libavutil：包含一些公共的工具函数；
+l">
+<meta property="og:updated_time" content="2015-08-05T02:34:45.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="编译可供Android使用的FFmpeg库">
+<meta name="twitter:description" content="FFmpeg是一套强大的音、视频处理工具。常用来对音频、视频进行合并或分离、拼接、剪裁，音频视频的转码等，还有非常强大的视频采集、视频抓图、给视频加水印等功能。主要组件：
+
+libavformat：用于各种音视频封装格式的生成和解析，包括获取解码所需信息以生成解码上下文结构和读取音视频帧等功能；
+libavcodec：用于各种类型声音/图像编解码；
+libavutil：包含一些公共的工具函数；
+l">
+  
+    <link rel="alternative" href="atom.xml" title="CrazyMan" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+<!--   <link href="//fonts.useso.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css"> -->
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">CrazyMan</a>
+      </h1>
+      
+        <h3 id="subtitle-wrap">
+          <p id="subtitle">NOTHING IS TRUE</p>
+        </h2>
+        <h3 id="subtitle-wrap">
+          <p id="subtitle">EVERYTHING IS PERMITTED</p>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/index.html">首页</a>
+        
+          <a class="main-nav-link" href="/archives">存档</a>
+        
+          <a class="main-nav-link" href="/about">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="atom.xml" title="RSS Feed"></a>
+        
+      </nav>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-编译ffmpeg" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/05/06/编译ffmpeg/" class="article-date">
+  <time datetime="2015-05-06T06:23:42.000Z" itemprop="datePublished">2015-05-06</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android/">Android</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      编译可供Android使用的FFmpeg库
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>FFmpeg是一套强大的音、视频处理工具。常用来对音频、视频进行合并或分离、拼接、剪裁，音频视频的转码等，还有非常强大的视频采集、视频抓图、给视频加水印等功能。主要组件：</p>
+<ul>
+<li>libavformat：用于各种音视频封装格式的生成和解析，包括获取解码所需信息以生成解码上下文结构<br>和读取音视频帧等功能；</li>
+<li>libavcodec：用于各种类型声音/图像编解码；</li>
+<li>libavutil：包含一些公共的工具函数；</li>
+<li>libswscale：用于视频场景比例缩放、色彩映射转换；</li>
+<li>libpostproc：用于后期效果处理；</li>
+<li>ffmpeg：该项目提供的一个工具，可用于格式转换、解码或电视卡即时编码等；</li>
+<li>ffsever：一个 HTTP 多媒体即时广播串流服务器；</li>
+<li>ffplay：是一个简单的播放器，使用ffmpeg 库解析和解码，通过SDL显示；</li>
+</ul>
+<h2 id="编译FFmpeg">编译FFmpeg</h2><ul>
+<li>下载<a href="http://ffmpeg.org/download.html" target="_blank" rel="external">ffmpeg</a></li>
+</ul>
+<p>本测试使用的版本为2.6.1， 使用其它版本时请灵活变通</p>
+<ul>
+<li>编译成互相独立的动态库</li>
+</ul>
+<p>ffmpeg的每一个组件单独编译成.so库，通过android的jni技术，使用c调用这些.so库中的方法，<br>实现我们想要的功能。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="shebang">#!/bin/bash</span><br><span class="line"></span></span><br><span class="line"><span class="comment"># NDK的路径，根据自己的安装位置进行设置</span></span><br><span class="line">NDK=/Users/uniflor/Apps/android-ndk</span><br><span class="line"></span><br><span class="line"><span class="comment"># 编译针对的平台，可以根据自己的需求进行设置</span></span><br><span class="line"><span class="comment"># 这里选择最低支持android-14, arm架构，生成的so库是放在</span></span><br><span class="line"><span class="comment"># libs/armeabi文件夹下的，若针对x86架构，要选择arch-x86</span></span><br><span class="line">PLATFORM=<span class="variable">$NDK</span>/platforms/android-<span class="number">14</span>/arch-arm</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 工具链的路径，根据编译的平台不同而不同</span></span><br><span class="line"><span class="comment"># arm-linux-androideabi-4.9与上面设置的PLATFORM对应，4.9为工具的版本号，</span></span><br><span class="line"><span class="comment"># 根据自己安装的NDK版本来确定，一般使用最新的版本</span></span><br><span class="line">TOOLCHAIN=<span class="variable">$NDK</span>/toolchains/arm-linux-androideabi-<span class="number">4.9</span>/prebuilt/darwin-x86_64</span><br><span class="line"></span><br><span class="line">ARCH=arm</span><br><span class="line">TARGETOS=android</span><br><span class="line">PREFIX=$(<span class="built_in">pwd</span>)/<span class="variable">$TARGETOS</span>/<span class="variable">$ARCH</span></span><br><span class="line">ADDITIONAL_CONFIGURE_FLAG=</span><br><span class="line"></span><br><span class="line">./configure \</span><br><span class="line">    --prefix=<span class="variable">$PREFIX</span> \</span><br><span class="line">    --enable-shared \</span><br><span class="line">    --disable-static \</span><br><span class="line">    --disable-doc \</span><br><span class="line">    --disable-programs \</span><br><span class="line">    --enable-small \</span><br><span class="line">    --disable-avdevice \</span><br><span class="line">    --disable-devices \</span><br><span class="line">    --disable-protocols \</span><br><span class="line">    --enable-protocol=file \</span><br><span class="line">    --enable-cross-compile \</span><br><span class="line">    --cross-prefix=<span class="variable">$TOOLCHAIN</span>/bin/arm-linux-androideabi- \</span><br><span class="line">    --sysroot=<span class="variable">$PLATFORM</span> \</span><br><span class="line">    --extra-cflags=<span class="string">"-Os -fpic"</span> \</span><br><span class="line">    --extra-ldflags=<span class="string">"<span class="variable">$ADDI_LDFLAGS</span>"</span> \</span><br><span class="line">    --arch=<span class="string">"<span class="variable">$ARCH</span>"</span> \</span><br><span class="line">    --target-os=<span class="string">"<span class="variable">$TARGETOS</span>"</span></span><br><span class="line"></span><br><span class="line">make clean</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+<p>等待几分钟，命令运行结束后会在ffmpeg目录下生成一个anroid/arm的目录，<br>目录中会有提取的头文件和动态库。<br>生成以下动态库如下：</p>
+<ul>
+<li>libavcodec.so</li>
+<li>libavdevice.so</li>
+<li>libavfilter.so</li>
+<li>libavformat.so</li>
+<li>libavutil.so</li>
+<li>libswresample.so</li>
+<li>libswscale.so</li>
+</ul>
+<p>每个库的作用，请自行百度或google, 生的动态库要进行精简或扩展功能的请参考ffmpeg官方文档来<br>调整上面的configure的参数。</p>
+<ul>
+<li>编译libffmpeg.so</li>
+</ul>
+<p>如果感觉生成的库太多，调用时一一加载麻烦，可以把这些库合并成一个库。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="shebang">#!/bin/bash</span><br><span class="line"></span></span><br><span class="line"><span class="comment"># NDK的路径，根据自己的安装位置进行设置</span></span><br><span class="line">NDK=/Users/uniflor/Apps/android-ndk</span><br><span class="line"></span><br><span class="line"><span class="comment"># 编译针对的平台，可以根据自己的需求进行设置</span></span><br><span class="line"><span class="comment"># 这里选择最低支持android-14, arm架构，生成的so库是放在</span></span><br><span class="line"><span class="comment"># libs/armeabi文件夹下的，若针对x86架构，要选择arch-x86</span></span><br><span class="line">PLATFORM=<span class="variable">$NDK</span>/platforms/android-<span class="number">14</span>/arch-arm</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 工具链的路径，根据编译的平台不同而不同</span></span><br><span class="line"><span class="comment"># arm-linux-androideabi-4.9与上面设置的PLATFORM对应，4.9为工具的版本号，</span></span><br><span class="line"><span class="comment"># 根据自己安装的NDK版本来确定，一般使用最新的版本</span></span><br><span class="line">TOOLCHAIN=<span class="variable">$NDK</span>/toolchains/arm-linux-androideabi-<span class="number">4.9</span>/prebuilt/darwin-x86_64</span><br><span class="line"></span><br><span class="line">ARCH=arm</span><br><span class="line">TARGETOS=android</span><br><span class="line">PREFIX=$(<span class="built_in">pwd</span>)/<span class="variable">$TARGETOS</span>/<span class="variable">$ARCH</span></span><br><span class="line">ADDITIONAL_CONFIGURE_FLAG=</span><br><span class="line"></span><br><span class="line">./configure \</span><br><span class="line">    --prefix=<span class="variable">$PREFIX</span> \</span><br><span class="line">    --enable-shared \</span><br><span class="line">    --disable-static \</span><br><span class="line">    --disable-doc \</span><br><span class="line">    --disable-programs \</span><br><span class="line">    --enable-small \</span><br><span class="line">    --disable-avdevice \</span><br><span class="line">    --disable-devices \</span><br><span class="line">    --disable-protocols \</span><br><span class="line">    --enable-protocol=file \</span><br><span class="line">    --enable-cross-compile \</span><br><span class="line">    --cross-prefix=<span class="variable">$TOOLCHAIN</span>/bin/arm-linux-androideabi- \</span><br><span class="line">    --sysroot=<span class="variable">$PLATFORM</span> \</span><br><span class="line">    --extra-cflags=<span class="string">"-Os -fpic"</span> \</span><br><span class="line">    --extra-ldflags=<span class="string">"<span class="variable">$ADDI_LDFLAGS</span>"</span> \</span><br><span class="line">    --arch=<span class="string">"<span class="variable">$ARCH</span>"</span> \</span><br><span class="line">    --target-os=<span class="string">"<span class="variable">$TARGETOS</span>"</span></span><br><span class="line"></span><br><span class="line">make clean</span><br><span class="line">make</span><br><span class="line">make install</span><br><span class="line"></span><br><span class="line"><span class="comment"># 合并生成的静态库</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$TOOLCHAIN</span>/bin/arm-linux-androideabi-ld \</span><br><span class="line">    -rpath-link=<span class="variable">$PLATFORM</span>/usr/lib \</span><br><span class="line">    -L<span class="variable">$PLATFORM</span>/usr/lib \</span><br><span class="line">    -soname libffmpeg.so \</span><br><span class="line">    -shared -nostdlib  \</span><br><span class="line">    -Bsymbolic \</span><br><span class="line">    --whole-archive --no-undefined \</span><br><span class="line">    -o <span class="variable">$PREFIX</span>/libffmpeg.so \</span><br><span class="line">    libavcodec/libavcodec.a \</span><br><span class="line">    libavfilter/libavfilter.a \</span><br><span class="line">    libswresample/libswresample.a \</span><br><span class="line">    libavformat/libavformat.a \</span><br><span class="line">    libavutil/libavutil.a \</span><br><span class="line">    libswscale/libswscale.a \</span><br><span class="line">    -lc -lm -lz -ldl -llog \</span><br><span class="line">    <span class="variable">$TOOLCHAIN</span>/lib/gcc/arm-linux-androideabi/<span class="number">4.9</span>/libgcc.a</span><br></pre></td></tr></table></figure>
+<p>等待几分钟，命令运行结束后会在ffmpeg目录下生成一个anroid/arm的目录, 目录中会有提取的头文件和生成的libffmpeg.so库。</p>
+<h2 id="以命令行的形式来使用ffmpeg">以命令行的形式来使用ffmpeg</h2><p>在编译ffmpeg时，使用了参数 –disable-ffmpeg， 是不会生成ffmpeg工具的，不过生成了，<br>在android应用下也无法直接使用。但我们可以使用jni技术，间接调用ffmpeg的命令行方式。</p>
+<ul>
+<li><p>为android项目创建jni文件夹</p>
+<p>  创建jni文件夹，添加文件Android.mk和Application.mk</p>
+</li>
+<li><p>添加Application.mk文件</p>
+<p>  内容如下：</p>
+</li>
+</ul>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="constant">APP_ABI</span> := armeabi</span><br><span class="line"><span class="constant">APP_ABI</span> += armeabi-v7a</span><br><span class="line"><span class="constant">APP_PLATFORM</span> := android-14</span><br></pre></td></tr></table></figure>
+<ul>
+<li>复制ffmpeg文件</li>
+</ul>
+<p>复制上面android文件夹下的头文件文件夹include和ffmpeg.h, ffmpeg.c, ffmpeg_opt.c, ffmpeg_filter.c，<br>cmdutils.c, cmdutils.h, cmdutils_common_opts.h, config.h, libffmpeg.so到jni目录下</p>
+<ul>
+<li>修改ffmpeg.c和ffmpeg.h</li>
+</ul>
+<p>找到ffmpeg.c，把int man(int argc, char <strong>argv)改名为<br>int run(int argc, char </strong>argv)</p>
+<p>找到ffmpeg.h, 在文件末尾添加函数申明: int run(int argc, char **argv);</p>
+<ul>
+<li>修改cmdutils.c</li>
+</ul>
+<p>找到cmdutils.c中的exit_program函数，注释到 exit(ret), 添加 return ret；<br>并修改函数的返回类型为int, 找到cmdutils.h中exit_program的申明，也把返回类型修改为int。</p>
+<ul>
+<li>生成接口文件com.example.ffmpeg.FFmpegKit.java</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.ffmpeg;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FFmpegKit</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> ArrayList&lt;String&gt; commands;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">FFmpegKit</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.commands = <span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line">        <span class="keyword">this</span>.commands.add(<span class="string">"ffmpeg"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">run</span><span class="params">(String[] commands)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>生成头文件com_example_ffmpeg_FFmpegKit.h</li>
+</ul>
+<p>使用javah生成</p>
+<ul>
+<li>添加com_example_ffmpeg_FFmpegKit.c</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">"com_example_ffmpeg_FFmpegKit.h"</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">"ffmpeg.h"</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span><br><span class="line"> * Class:     com_example_ffmpeg_FFmpegKit</span><br><span class="line"> * Method:    run</span><br><span class="line"> * Signature: (Ljava/lang/String;)I</span><br><span class="line"> */</span></span><br><span class="line"><span class="function">JNIEXPORT jint JNICALL <span class="title">Java_com_example_ffmpeg_FFmpegKit_run</span><span class="params">(JNIEnv *env,</span><br><span class="line">        jclass obj, jobjectArray commands)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> argc = (*env)-&gt;GetArrayLength(env, commands);</span><br><span class="line">    <span class="keyword">char</span> *argv[argc];</span><br><span class="line"></span><br><span class="line">    __android_log_print(ANDROID_LOG_ERROR,<span class="string">"Kit"</span>,<span class="string">"argc %d\n"</span>, argc);</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; argc; i++) &#123;</span><br><span class="line">        jstring js = (jstring) (*env)-&gt;GetObjectArrayElement(env, commands, i);</span><br><span class="line">        argv[i] = (<span class="keyword">char</span>*) (*env)-&gt;GetStringUTFChars(env, js, <span class="number">0</span>);</span><br><span class="line">        __android_log_print(ANDROID_LOG_ERROR,<span class="string">"Kit"</span>,<span class="string">"argv %s\n"</span>, argv[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> run(argc, argv);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Android.mk文件内空为</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="constant">LOCAL_PATH</span> := <span class="variable">$(call my-dir)</span></span><br><span class="line"></span><br><span class="line">include $(CLEAR_VARS)</span><br><span class="line"></span><br><span class="line"><span class="constant">LOCAL_MODULE</span> := ffmpeg</span><br><span class="line"><span class="constant">LOCAL_SRC_FILES</span> := libffmpeg.so</span><br><span class="line">include $(PREBUILT_SHARED_LIBRARY)</span><br><span class="line"></span><br><span class="line">include $(CLEAR_VARS)</span><br><span class="line"><span class="constant">LOCAL_MODULE</span> := ffmpeginvoke</span><br><span class="line"><span class="constant">LOCAL_SRC_FILES</span> := com_example_ffmpeg_FFmpegKit.c ffmpeg.c ffmpeg_opt.c cmdutils.c ffmpeg_filter.c</span><br><span class="line"><span class="constant">LOCAL_C_INCLUDES</span> := <span class="variable">$(LOCAL_PATH)</span></span><br><span class="line"><span class="constant">LOCAL_LDLIBS</span> := -llog -lz -ldl</span><br><span class="line"><span class="constant">LOCAL_SHARED_LIBRARIES</span> := ffmpeg</span><br><span class="line"></span><br><span class="line">include $(BUILD_SHARED_LIBRARY)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>编译接口</li>
+</ul>
+<ul>
+<li>测试接口</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.loadLibrary(<span class="string">"ffmpeg"</span>);</span><br><span class="line">        System.loadLibrary(<span class="string">"ffmpeginvoke"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        </span><br><span class="line">        String base = Environment.getExternalStorageDirectory().getPath();</span><br><span class="line">        Log.e(<span class="string">"PATH"</span>, base);</span><br><span class="line">        String[] commands = <span class="keyword">new</span> String[<span class="number">9</span>];</span><br><span class="line">        commands[<span class="number">0</span>] = <span class="string">"ffmpeg"</span>;</span><br><span class="line">        commands[<span class="number">1</span>] = <span class="string">"-i"</span>;</span><br><span class="line">        commands[<span class="number">2</span>] = base + <span class="string">"/input.mp4"</span>;</span><br><span class="line">        commands[<span class="number">3</span>] = <span class="string">"-i"</span>;</span><br><span class="line">        commands[<span class="number">4</span>] = base + <span class="string">"/input.mp3"</span>;</span><br><span class="line">        commands[<span class="number">5</span>] = <span class="string">"-strict"</span>;</span><br><span class="line">        commands[<span class="number">6</span>] = <span class="string">"-2"</span>;</span><br><span class="line">        commands[<span class="number">7</span>] = <span class="string">"-y"</span>;</span><br><span class="line">        commands[<span class="number">8</span>] = base + <span class="string">"/merge.mp4"</span>;</span><br><span class="line">        <span class="keyword">int</span> result = FFmpegKit.run(commands);</span><br><span class="line">        Log.e(<span class="string">"RESULT"</span>, result + <span class="string">"**********************"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.crazyman.top/2015/05/06/编译ffmpeg/" data-id="cid2q09g00006nnaroureuv28" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/05/06/BootingInInsecureMode/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          booting in insecure mode
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/05/06/AndroidStudio代理设置/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">AndroidStudio代理设置</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><span class="category-list-count">4</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/工具/Git/">Git</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/SVN/">SVN</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/rsync/">rsync</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/服务器/">服务器</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/系统/">系统</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/系统/Mac/">Mac</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/系统/Ubuntu/">Ubuntu</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/语言/">语言</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/语言/LUA/">LUA</a><span class="category-list-count">3</span></li></ul></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/apache/">apache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git-server/">git server</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/git-server/" style="font-size: 10px;">git server</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">存档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/06/04/使用Unix日志/">使用Unix日志</a>
+          </li>
+        
+          <li>
+            <a href="/2015/06/03/unix下创建守护进程/">unix下创建守护进程</a>
+          </li>
+        
+          <li>
+            <a href="/2015/05/23/Mac下弹出气泡通知/">Mac下弹出气泡通知</a>
+          </li>
+        
+          <li>
+            <a href="/2015/05/23/Linux-Bridge/">Linux Bridge</a>
+          </li>
+        
+          <li>
+            <a href="/2015/05/21/SVN忽略文件/">SVN忽略文件</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      Copyright (C) 2015 Ozone, All Rights Reserved.<br>
+      <a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/index.html" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">存档</a>
+  
+    <a href="/about" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="/js/jquery-2.0.3.js" type="text/javascript"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>
