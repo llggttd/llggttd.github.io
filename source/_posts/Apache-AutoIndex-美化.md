@@ -2,7 +2,6 @@ title: "Apache AutoIndex 美化"
 date: 2015-04-30 11:29:11
 categories:
 - 服务器
-tags:
 ---
 
 通过Apache搭建网页服务器，但开启了某个目录的autoindex功能时，可以很方便的实现文件共享。

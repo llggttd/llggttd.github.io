@@ -1,6 +1,5 @@
 title: "使用Rsync"
 date: 2015-05-07 10:55:10
-tags:
 categories:
 - 工具
 - rsync

@@ -14,13 +14,13 @@ categories:
     *type(arg)*
     接收一个参数， 返回值为string类型
 
-    ``` lua
-    local a = 1
-    local b = "1"
-    local c = true
+``` lua
+local a = 1
+local b = "1"
+local c = true
 
-    print(type(a), type(b), type(c))
-    ```
+print(type(a), type(b), type(c))
+```
 
     *返回值为八种数据类型其中之一："nil", "number", "string", "boolean", "table", "function", "thread", and "userdata"。*
 
@@ -31,12 +31,12 @@ categories:
     *print(arg1, arg2, ...)*
     *可以接收任意个数的参数，不支持格式化输出，要格式化输出，使用string.format()转化后输出*
 
-    ``` lua
-    local a = "Hello"
-    local b = "Lua"
-    print(a, b)
-    print(a .. "," .. b)
-    ```
+``` lua
+local a = "Hello"
+local b = "Lua"
+print(a, b)
+print(a .. "," .. b)
+```
 
 - tostring 转换成字符串类型
 
@@ -52,29 +52,29 @@ categories:
     *v为要判断的值，当v的值为false时， 打印错误，错误的描述为msg字符串*
     *当v的值为false时，打印错误，程序会终止运行*
 
-    ``` lua
-    local i = 0
-    assert(i > 0, "can not run, i <= 0")
-    ```
+``` lua
+local i = 0
+assert(i > 0, "can not run, i <= 0")
+```
 
 - pcall 在安全模式下调用方法
 
     *pcall(func, arg1, arg2, ...)*
     *可以通过pcall(func)以安全模式调用方法，方法func执行成功，pcall返回true, func执行失败，返回false和一个错误描述*
 
-    ``` lua
-    function check()
-        local id = 12
-        assert(id > 10, "id can not less then 10")
-    end
+``` lua
+function check()
+    local id = 12
+    assert(id > 10, "id can not less then 10")
+end
 
-    local status, message = pcall(check)
-    if not status then
-        print(message)
-    else
-        print("success")
-    end
-    ```
+local status, message = pcall(check)
+if not status then
+    print(message)
+else
+    print("success")
+end
+```
 
 - xpcall 与pcall相似
 

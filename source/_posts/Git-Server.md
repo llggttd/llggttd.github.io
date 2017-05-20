@@ -4,10 +4,6 @@ updated: 2015-05-14 18:17:54
 categories:
 - 工具
 - Git
-tags:
-- git
-- git server
-- apache
 ---
 
 如果想在Windows平台上实现一个Git服务器，可以通过apache+git组合来实现。

@@ -1,7 +1,6 @@
 title: "编译可供Android使用的FFmpeg库"
-date: 2015-05-06 14:23:42
-updated: 2015-08-05 10:34:45
-tags:
+date: 2015-05-06T14:23:42+08:00
+updated: 2015-08-05T10:34:45+08:00
 categories:
 - Android
 ---

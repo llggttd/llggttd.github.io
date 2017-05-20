@@ -5,7 +5,6 @@ layout: post
 comments:   true
 categories:
 - Android
-tags:
 ---
 
 # 使用方法
@@ -16,3 +15,5 @@ tags:
 + 在『HTTP Proxy Port』输入框内填入：80
 + 并且选中『Force https:// ... 』复选框。设置完成后单击『Close』按钮关闭
 + 依次选择『Packages』、『Reload』。
+
+![](/images/android_sdk.png)
