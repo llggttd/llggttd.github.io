@@ -1,11 +1,13 @@
+--- 
 title: "Ubuntu下重新安装Ubuntu"
 date: 2015-04-29 15:30:00
 updated: 2015-04-30 07:30:00
 layout: post
-comments:   true
+comments: true
 categories:
 - 系统
 - Ubuntu
+tags:
 ---
 
 ## 通过grub引导ubuntu镜像文件来安装系统

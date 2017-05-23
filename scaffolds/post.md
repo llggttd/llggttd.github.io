@@ -1,3 +1,4 @@
+---
 title: {{ title }}
 date: {{ date }}
 updated: {{ date }}
@@ -7,4 +8,4 @@ tags:
 
 *discription*
 
-## {{ title }}
+### {{ title }}

@@ -1,8 +1,9 @@
+---
 title: "中科院Android SDK镜像"
 date: 2015-04-29 15:00:00
-updated:
+updated: 2015-04-29 15:00:00
 layout: post
-comments:   true
+comments: true
 categories:
 - Android
 ---
