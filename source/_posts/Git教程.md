@@ -1,3 +1,4 @@
+---
 title: "Git教程"
 date: 2015-04-29 14:40:00
 updated:
@@ -5,7 +6,7 @@ layout: post
 comments:   true
 categories:
 - 工具
-- Git
+- git
 ---
 
 ## 常用命令

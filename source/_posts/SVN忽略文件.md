@@ -1,3 +1,4 @@
+---
 title: "SVN忽略文件"
 date: 2015-05-21 18:29:48
 updated: 2015-05-21 18:29:48
@@ -5,6 +6,7 @@ categories:
 - 工具
 - SVN
 tags:
+- ignore
 ---
 
 如何忽略subversion中的文件或目录

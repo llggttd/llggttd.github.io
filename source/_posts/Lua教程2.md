@@ -1,3 +1,4 @@
+---
 title: "Lua教程二"
 date: 2015-05-04 22:39:09
 layout: post

@@ -1,4 +1,4 @@
---- 
+---
 title: "Ubuntu下重新安装Ubuntu"
 date: 2015-04-29 15:30:00
 updated: 2015-04-30 07:30:00
@@ -6,7 +6,7 @@ layout: post
 comments: true
 categories:
 - 系统
-- Ubuntu
+- ubuntu
 tags:
 ---
 
@@ -30,7 +30,7 @@ tags:
     + 如果你现在的系统是ubuntu, 可以通过修改文件/etc/grub.d/40-custom来添加启动项。
     打开40-custom, 输入以下内容：
 
-    ``` sh
+    ``` bash
     menuentry "ISO" {
         set isofile="/boot/iso/ubuntu-15.04-desktop-amd64.iso"
         loopback loop (hd0, 1)$isofile
@@ -38,30 +38,31 @@ tags:
         initrd (loop)/casper/initrd
     }
     ```
+
     上面isofile是光盘镜像的位置，根据自己的情况进行设置。
 
     对上面几个命令的说明：
 
-        - menuentry
+    - menuentry
 
-        设定启动菜单的标题，也就是在grub启动选择菜单中看到的内容
+    设定启动菜单的标题，也就是在grub启动选择菜单中看到的内容
 
-        - set isofile
+    - set isofile
 
-        设置变量isofile, 指向iso镜像文件的路径， 因为iso的路径比较长，设置变量方便其它地方的输入
+    设置变量isofile, 指向iso镜像文件的路径， 因为iso的路径比较长，设置变量方便其它地方的输入
 
-        - loopback
+    - loopback
 
-        挂载镜像文件，这里要指明镜像文件的绝对路径。
-        (hd0, 4)表示硬盘0的4号分区， 可以通过命令df查看自己电脑上的具体情况
+    挂载镜像文件，这里要指明镜像文件的绝对路径。
+    (hd0, 4)表示硬盘0的4号分区， 可以通过命令df查看自己电脑上的具体情况
 
-        - linux
+    - linux
 
-        指定要搜索镜像的路径和要加载的内核路径
+    指定要搜索镜像的路径和要加载的内核路径
 
-        - initrd
+    - initrd
 
-        初始化临时的根文件系统
+    初始化临时的根文件系统
         
     然后运行sudo update-grub来重新生成启动菜单。重启电脑，进入grub的启动菜单，就可以看到ISO的启动项了。
 

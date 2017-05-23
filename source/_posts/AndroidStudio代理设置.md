@@ -1,7 +1,8 @@
+---
 title: "AndroidStudio代理设置"
 date: 2015-05-06 09:57:42
 categories:
-- Android
+- android
 ---
 
 Android Studio 第一次启动时会检测Android SDK的信息，无奈有GFW的阻挡，即使翻墙，下载速度也让人抓狂，还好国内有几个不错的镜像网站。

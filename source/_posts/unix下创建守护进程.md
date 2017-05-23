@@ -1,8 +1,12 @@
+---
 title: "unix下创建守护进程"
 date: 2015-06-03 10:37:42
 updated: 2015-06-03 10:37:42
 categories:
+- daemon
+- linux
 tags:
+- daemon
 ---
 
 守护进程(daemon), 表示后台运行的程序，一般随系统的启动自动地启动且在用户logoff后仍然能够继续运行。该daemon进程一般在启动后需要与父进程断开关系，并使进程没有控制终端（tty）。因为daemon程序在后台执行，不需要于终端交互，通常就关闭STDIN、STDOUT和STDER。daemon无法输出信息，可以使用syslog或自己的日志系统进行日志处理。

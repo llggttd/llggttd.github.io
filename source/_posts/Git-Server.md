@@ -1,9 +1,10 @@
+---
 title: "Windows平台下创建Git服务器"
 date: 2015-05-14 18:17:54
 updated: 2015-05-14 18:17:54
 categories:
 - 工具
-- Git
+- git
 ---
 
 如果想在Windows平台上实现一个Git服务器，可以通过apache+git组合来实现。

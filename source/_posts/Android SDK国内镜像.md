@@ -5,7 +5,7 @@ updated: 2015-04-29 15:00:00
 layout: post
 comments: true
 categories:
-- Android
+- android
 ---
 
 # 使用方法
