@@ -12,7 +12,9 @@ tags:
 
 *SED维护两个数据缓冲区：主动模式空间（pattern space）和辅助保留空间（hold space）。在操作过程中，SED从输入流读取一行存入pattern space，这里就是文本编辑操作发生的地方。hold space最初是空的，但也有在pattern space和hold space直接移动数据的命令。*
 
-### SED
+[官方文档地址](http://www.gnu.org/software/sed/manual/sed.html)
+
+#### sed命令语法
 
 使用sed命令的基本形式如下：
 
@@ -58,29 +60,51 @@ sed命令行选项如下：
     默认情况下，sed会所传入的文件列表作为一个文件流来处理，使用此选择可以让每个文件单独处理
 
  - --sandbox
+    在沙盒模式下，e/w/r命令不能执行，包含它们的命令会被取消。
 
-    In sandbox mode, e/w/r commands are rejected - programs containing them will be aborted without being run. Sandbox mode ensures sed operates only on the input files designated on the command line, and cannot run external programs.
-
- - -u
-   --unbuffered
-
-    Buffer both input and output as minimally as practical. (This is particularly useful if the input is coming from the likes of ‘tail -f’, and you wish to see the transformed output as soon as possible.)
  - -z
    --null-data
    --zero-terminated
 
     Treat the input as a set of lines, each terminated by a zero byte (the ASCII ‘NUL’ character) instead of a newline. This option can be used with commands like ‘sort -z’ and ‘find -print0’ to process arbitrary file names. 
 
-#### sed的命令
+#### sed的基本命令
 
 |命令         |说明         |示例         |
 |:------     |:------       |------     |
 |a          |附加行     |sed -i 'a----' 1.txt, 在1.txt每行后添加一行"----"|
 |c          |替换行     |sed -i '/----/c++++' 1.txt, 把1.txt每行"----"替换成"++++"|
-|d          |删除行     |sed -i '/----/c++++' 1.txt, 把1.txt每行"----"替换成"++++"|
-|g          |删除行     |sed -i '/----/c++++' 1.txt, 把1.txt每行"----"替换成"++++"|
+|d          |删除行     |sed -i '/++++/d' 1.txt, 把1.txt每行"++++"删除|
+|g          |把hold space中的内容写到pattern space|sed -i '/----/c++++' 1.txt, 把1.txt每行"----"替换成"++++"|
 |i          |删除行     |sed -i '/----/c++++' 1.txt, 把1.txt每行"----"替换成"++++"|
-|h          |删除行     |sed -i '/----/c++++' 1.txt, 把1.txt每行"----"替换成"++++"|
-|p          |删除行     |sed -i '/----/c++++' 1.txt, 把1.txt每行"----"替换成"++++"|
-|q          |删除行     |sed -i '/----/c++++' 1.txt, 把1.txt每行"----"替换成"++++"|
+|h          |把pattern space中的内容写到hold space|sed -i '/----/c++++' 1.txt, 把1.txt每行"----"替换成"++++"|
+|p          |打印patten space     |sed -i '/----/c++++' 1.txt, 把1.txt每行"----"替换成"++++"|
+|q          |退出命令     |sed -i '/----/c++++' 1.txt, 把1.txt每行"----"替换成"++++"|
+|s          |替换pattern space中的内容     |    |
+|x          |交换pattern space和hold space的内容     |    |
+|z          |清空pattern space|    |
+
+
+#### 匹配地址
+
+匹配地址决定了sed命令会对哪些行进行处理，若不指定匹配地址，默认会在所有行执行。
+
+- 指定行 - 具体行号
+`sed '144s/hello/world/' input.txt > output.txt` 把144行的hello替换成world
+
+- 指定行 - 行号范围
+`sed '144,244s/hello/world/' input.txt > output.txt` 把144行到244行的hello替换成world
+`sed '144,$s/hello/world/' input.txt > output.txt` 把144行到最后一行的hello替换成world
+
+- 指定行 - 步进范围
+`sed '0~2s/hello/world/' input.txt > output.txt` 把偶数行的hello替换成world
+`sed '1~2s/hello/world/' input.txt > output.txt` 把奇数行的hello替换成world
+
+- 指定行范围反选 - *!*
+`sed '144,244!s/hello/world/' input.txt > output.txt` 把144行到244行之外的行的hello替换成world
+
+- 使用正则表达式
+`sed '/apple/s/hello/world/' input.txt > output.txt` 把包含apple行的hello替换成world
+
+
 
